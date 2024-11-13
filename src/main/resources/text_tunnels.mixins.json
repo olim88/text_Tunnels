@@ -1,9 +1,8 @@
 {
   "required": true,
-  "minVersion": "0.8",
-  "package": "org.olim.text_tunnels.mixin",
+  "package": "org.olim.text_tunnels.mixins",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
+  "client": [
   ],
   "injectors": {
     "defaultRequire": 1

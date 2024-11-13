@@ -1,10 +1,10 @@
 package org.olim.text_tunnels;
 
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 
-public class Text_tunnels implements ModInitializer {
+public class Text_tunnels implements ClientModInitializer {
 
     @Override
-    public void onInitialize() {
+    public void onInitializeClient() {
     }
 }
