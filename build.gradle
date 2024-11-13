@@ -10,20 +10,24 @@ base {
     archivesName = project.archives_base_name
 }
 
-loom {
-    splitEnvironmentSourceSets()
-
-    mods {
-        "text_tunnels" {
-            sourceSet sourceSets.main
+sourceSets {
+    client {
+        java {
+            srcDirs = ['src/main/java']
         }
     }
 }
 
 repositories {
+    //yacl
     maven {
         name 'Xander Maven'
         url 'https://maven.isxander.dev/releases'
+    }
+    //modmenu
+    maven {
+        name = "Terraformers"
+        url = "https://maven.terraformersmc.com/releases"
     }
 }
 
@@ -37,6 +41,8 @@ dependencies {
 
     //YACL
     modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
+    //modmenu
+    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 }
 
 processResources {

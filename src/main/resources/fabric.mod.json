@@ -12,6 +12,9 @@
   "entrypoints": {
     "client": [
       "org.olim.text_tunnels.Text_tunnels"
+    ],
+    "modmenu": [
+      "org.olim.text_tunnels.config.ModMenuIntegration"
     ]
   },
   "mixins": [
