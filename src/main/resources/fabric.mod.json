@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "text_tunnels",
+  "version": "${version}",
+  "name": "Text Tunnels",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/text_tunnels/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "org.olim.text_tunnels.client.Text_tunnelsClient"
+    ],
+    "main": [
+      "org.olim.text_tunnels.Text_tunnels"
+    ]
+  },
+  "mixins": [
+    "text_tunnels.mixins.json",
+    {
+      "config": "text_tunnels.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
