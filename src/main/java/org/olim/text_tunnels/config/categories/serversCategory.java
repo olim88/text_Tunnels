@@ -1,12 +1,12 @@
 package org.olim.text_tunnels.config.categories;
 
-import dev.isxander.yacl3.api.ConfigCategory;
-import dev.isxander.yacl3.api.Option;
-import dev.isxander.yacl3.api.OptionDescription;
-import dev.isxander.yacl3.api.OptionGroup;
+import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
+import org.olim.text_tunnels.config.configManager;
 import org.olim.text_tunnels.config.configs.TextTunnelsConfig;
 import org.olim.text_tunnels.config.configs.serverConfig;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class serversCategory {
 
-    public static List<ConfigCategory> create(TextTunnelsConfig defaults, TextTunnelsConfig config) {
+    public static List<ConfigCategory> create(TextTunnelsConfig defaults, TextTunnelsConfig config, Screen parent) {
         //add each server as a category
         List<serverConfig.ServersConfig> allServers = config.serversConfig.serversConfigs;
         List<ConfigCategory> categories = new ArrayList<>(allServers.size());
@@ -42,9 +42,15 @@ public class serversCategory {
                                     () -> serverConfig.ip,
                                     newValue -> serverConfig.ip = newValue)
                             .controller(StringControllerBuilder::create)
+
                             .build())
 
                     .groups(createGroups(serverConfig.channelConfigs))
+
+                    .option(ButtonOption.createBuilder()
+                            .name(Text.literal("Add New Tunnel"))
+                            .action((yaclScreen, thisOption) -> addNewTunnel(serverConfig, parent))
+                            .build())
                     .build();
             categories.add(cat);
         }
@@ -78,12 +84,27 @@ public class serversCategory {
                                     newValue -> channel.sendPrefix = newValue)
                             .controller(StringControllerBuilder::create)
                             .build())
+                    .option(ButtonOption.createBuilder()
+                            .name(Text.literal("Delete this Tunnel"))
+                            .action((yaclScreen, thisOption) -> {
+                                configManager.save();
+                                allChannels.remove(channel);
+                                MinecraftClient.getInstance().setScreen(configManager.getConfigScreen(yaclScreen));
+                            })
+                            .build())
+
 
                     .build());
             groups.add(group);
 
         }
         return groups;
+    }
+
+    private static void addNewTunnel(serverConfig.ServersConfig config, Screen parent) {
+        config.channelConfigs.add(new serverConfig.ChannelConfig());
+        configManager.save();
+        MinecraftClient.getInstance().setScreen(configManager.getConfigScreen(parent));
     }
 
 }

@@ -43,10 +43,14 @@ public class configManager {
         return YetAnotherConfigLib.create(HANDLER, (defaults, config, builder) -> {
             builder.title(Text.literal("Text Tunnels Settings"))
                     .category(mainCategory.create(defaults, config))
-                    .categories(serversCategory.create(defaults, config))
+                    .categories(serversCategory.create(defaults, config, parentScreen))
                     .build();
             return builder;
 
+            
+
         }).generateScreen(parentScreen);
+
+
     }
 }
