@@ -7,4 +7,7 @@ public class TextTunnelsConfig {
     @SerialEntry
     public MainConfig mainConfig = new MainConfig();
 
+    @SerialEntry
+    public serverConfig serversConfig = new serverConfig();
+
 }
