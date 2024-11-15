@@ -3,6 +3,7 @@
   "package": "org.olim.text_tunnels.mixins",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "chatHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

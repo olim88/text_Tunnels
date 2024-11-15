@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.ServerList;
+import org.olim.text_tunnels.config.MessageHandler;
 import org.olim.text_tunnels.config.configManager;
 import org.olim.text_tunnels.config.configs.serverConfig;
 import org.slf4j.Logger;
@@ -24,6 +25,9 @@ public class Text_tunnels implements ClientModInitializer {
         configManager.init();
         System.out.println("Text Tunnels Mod Initialized!");
         getServerList();
+
+        //other init
+        MessageHandler.init();
     }
 
 
