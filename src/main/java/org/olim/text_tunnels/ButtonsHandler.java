@@ -17,13 +17,14 @@ public class ButtonsHandler {
         activeButtons.clear();
 
         //generate new button names and offset them
-        for (String name : buttonNames) {
-            activeButtons.add(new ButtonWidget.Builder(Text.of(name), button -> channelUpdate(button, name)).build());
+        for (int i = 0; i < buttonNames.size(); i++) {
+            int finalI = i;
+            activeButtons.add(new ButtonWidget.Builder(Text.of(buttonNames.get(i)), button -> channelUpdate(button, finalI)).build());
         }
     }
 
-    private static void channelUpdate(ButtonWidget pressedButton, String name) {
-        MessageHandler.updateTunnel(name);
+    private static void channelUpdate(ButtonWidget pressedButton, int index) {
+        Text_tunnels.updateTunnel(index);
         //set active to focused
         updateFocus(pressedButton);
     }
@@ -39,7 +40,7 @@ public class ButtonsHandler {
     public static void updatePositions(int x, int y, int height) {
         int rowOffset = 0;
         for (ButtonWidget button : activeButtons) {
-            button.setPosition(x + rowOffset, y - height);
+            button.setPosition(x + rowOffset, y - height - 4);
             button.setHeight(height);
             //set the width to needed
             int width = CLIENT.textRenderer.getWidth(button.getMessage()) + 4; //+4 to account for padding

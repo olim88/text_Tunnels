@@ -20,6 +20,14 @@ public class Text_tunnels implements ClientModInitializer {
     private static final Logger LOGGER = LogUtils.getLogger();
 
 
+    private static serverConfig.ServersConfig currentConfig;
+
+    public static void updateTunnel(int index) {
+        //finds the regex linked and send to message handler
+        MessageHandler.updateTunnel(currentConfig.channelConfigs.get(index).recivePrefix);
+    }
+
+
     @Override
     public void onInitializeClient() {
         //load config
@@ -33,10 +41,12 @@ public class Text_tunnels implements ClientModInitializer {
         for (serverConfig.ServersConfig server : configManager.get().serversConfig.serversConfigs) {
             //if (server.ip.equals(serverAddress)) { todo THIS IS VERY TEMP DEFAULTS TO FIRST SERVER FOR TESTING
             LOGGER.info("[TextTunnels] loaded config for \"{}\"", serverAddress);
+            currentConfig = server;
             //get this list off channel names and update
             List<String> names = server.channelConfigs.stream().map(channelConfig -> channelConfig.name).toList();
+            List<String> receivePrefixes = server.channelConfigs.stream().map(channelConfig -> channelConfig.recivePrefix).toList();
             ButtonsHandler.load(names);
-            MessageHandler.load(names);
+            MessageHandler.load(receivePrefixes);
             break;
             //}
         }

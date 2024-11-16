@@ -3,6 +3,9 @@ package org.olim.text_tunnels.mixins;
 
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
+import net.minecraft.client.gui.hud.MessageIndicator;
+import net.minecraft.network.message.MessageSignatureData;
+import net.minecraft.text.Text;
 import org.objectweb.asm.Opcodes;
 import org.olim.text_tunnels.MessageHandler;
 import org.spongepowered.asm.mixin.Final;
@@ -27,8 +30,8 @@ public class ChatHudMixin {
     @Final
     private List<ChatHudLine.Visible> visibleMessages;
 
-    @Inject(method = "logChatMessage", at = @At("HEAD"))
-    private void onLogChatMessage(ChatHudLine message, CallbackInfo ci) {
+    @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;Lnet/minecraft/client/gui/hud/MessageIndicator;)V", at = @At("HEAD"))
+    private void onLogChatMessage(Text message, MessageSignatureData signatureData, MessageIndicator indicator, CallbackInfo ci) {
         // You can modify the message here before it gets added
         MessageHandler.addMessage(message);
     }
