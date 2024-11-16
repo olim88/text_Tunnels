@@ -3,21 +3,22 @@ package org.olim.text_tunnels;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.ServerList;
-import org.olim.text_tunnels.config.MessageHandler;
 import org.olim.text_tunnels.config.configManager;
 import org.olim.text_tunnels.config.configs.serverConfig;
 import org.slf4j.Logger;
 
-import java.util.Dictionary;
+import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Text_tunnels implements ClientModInitializer {
+    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     private static final Logger LOGGER = LogUtils.getLogger();
+
 
     @Override
     public void onInitializeClient() {
@@ -25,11 +26,34 @@ public class Text_tunnels implements ClientModInitializer {
         configManager.init();
         System.out.println("Text Tunnels Mod Initialized!");
         getServerList();
-
-        //other init
-        MessageHandler.init();
     }
 
+    public static void loadForServer(String serverAddress) {
+        //if the server has a config load that config
+        for (serverConfig.ServersConfig server : configManager.get().serversConfig.serversConfigs) {
+            //if (server.ip.equals(serverAddress)) { todo THIS IS VERY TEMP DEFAULTS TO FIRST SERVER FOR TESTING
+            LOGGER.info("[TextTunnels] loaded config for \"{}\"", serverAddress);
+            //get this list off channel names and update
+            List<String> names = server.channelConfigs.stream().map(channelConfig -> channelConfig.name).toList();
+            ButtonsHandler.load(names);
+            MessageHandler.load(names);
+            break;
+            //}
+        }
+        LOGGER.info("[TextTunnels] could not find config for \"{}\"", serverAddress);
+    }
+
+
+    public static void configUpdated() {
+        //when the config is updated check if the player is on a sever and then reload
+        ClientPlayNetworkHandler networkHandler = CLIENT.getNetworkHandler();
+        if (networkHandler != null) {
+            SocketAddress address = networkHandler.getConnection().getAddress();
+            if (address != null) {
+                loadForServer(address.toString());
+            }
+        }
+    }
 
     public void getServerList() {
         // Get the current Minecraft client instance
@@ -43,10 +67,10 @@ public class Text_tunnels implements ClientModInitializer {
         LOGGER.info("[TextTunnels] found {} serves", serverList.size());
 
         //get a ditnary of ips and names of the found servers
-        Map<String,String> usersSevers = new HashMap<>();
+        Map<String, String> usersSevers = new HashMap<>();
         for (int i = 0; i < serverList.size(); i++) {
             ServerInfo serverInfo = serverList.get(i);
-            usersSevers.put(serverInfo.address,serverInfo.name);
+            usersSevers.put(serverInfo.address, serverInfo.name);
         }
 
         //update config if there are new servers
@@ -63,9 +87,13 @@ public class Text_tunnels implements ClientModInitializer {
             newConfig.name = server.getValue();
             configManager.get().serversConfig.serversConfigs.add(newConfig);
         }
-        if (!usersSevers.isEmpty()){
+        if (!usersSevers.isEmpty()) {
             LOGGER.info("[TextTunnels] saved new servers to config");
             configManager.save();
         }
+    }
+
+    private static void loadTunnels() {
+
     }
 }

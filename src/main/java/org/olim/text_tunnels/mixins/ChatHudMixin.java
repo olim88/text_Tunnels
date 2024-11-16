@@ -4,7 +4,7 @@ package org.olim.text_tunnels.mixins;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import org.objectweb.asm.Opcodes;
-import org.olim.text_tunnels.config.MessageHandler;
+import org.olim.text_tunnels.MessageHandler;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(ChatHud.class)
-public class chatHudMixin {
+public class ChatHudMixin {
 
     @Shadow
     @Final
@@ -48,6 +48,8 @@ public class chatHudMixin {
         }
         return visibleMessages;
     }
+
+
 
 
 }
