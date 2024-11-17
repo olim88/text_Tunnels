@@ -24,7 +24,12 @@ public class Text_tunnels implements ClientModInitializer {
 
     public static void updateTunnel(int index) {
         //finds the regex linked and send to message handler
-        MessageHandler.updateTunnel(currentConfig.channelConfigs.get(index).recivePrefix);
+        if (index != -1) {
+            MessageReceiveHandler.updateTunnel(currentConfig.channelConfigs.get(index).recivePrefix);
+        } else {
+            MessageReceiveHandler.updateTunnel(null);
+        }
+        MessageSendHandler.updateIndex(index);
     }
 
 
@@ -45,8 +50,10 @@ public class Text_tunnels implements ClientModInitializer {
             //get this list off channel names and update
             List<String> names = server.channelConfigs.stream().map(channelConfig -> channelConfig.name).toList();
             List<String> receivePrefixes = server.channelConfigs.stream().map(channelConfig -> channelConfig.recivePrefix).toList();
+            List<String> sendPrefixes = server.channelConfigs.stream().map(channelConfig -> channelConfig.sendPrefix).toList();
             ButtonsHandler.load(names);
-            MessageHandler.load(receivePrefixes);
+            MessageReceiveHandler.load(receivePrefixes);
+            MessageSendHandler.load(sendPrefixes);
             break;
             //}
         }

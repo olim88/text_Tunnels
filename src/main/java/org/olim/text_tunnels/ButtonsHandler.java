@@ -15,6 +15,8 @@ public class ButtonsHandler {
 
     public static void load(List<String> buttonNames) {
         activeButtons.clear();
+        //add all button
+        activeButtons.add(new ButtonWidget.Builder(Text.of("All"), button -> channelUpdate(button, -1)).build());
 
         //generate new button names and offset them
         for (int i = 0; i < buttonNames.size(); i++) {
