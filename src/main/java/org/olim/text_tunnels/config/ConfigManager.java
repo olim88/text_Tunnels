@@ -15,7 +15,7 @@ import org.olim.text_tunnels.config.configs.TextTunnelsConfig;
 
 import java.nio.file.Path;
 
-public class configManager {
+public class ConfigManager {
     private static final Path CONFIG_FILE = FabricLoader.getInstance().getConfigDir().resolve("textTunnels.json");
     private static final ConfigClassHandler<TextTunnelsConfig> HANDLER = ConfigClassHandler.createBuilder(TextTunnelsConfig.class)
             .serializer(config -> GsonConfigSerializerBuilder.create(config)

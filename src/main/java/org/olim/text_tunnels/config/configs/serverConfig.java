@@ -26,10 +26,13 @@ public class serverConfig {
 
     public static class ChannelConfig {
         @SerialEntry
-        public String name = "Other";
+        public boolean enabled = true;
 
         @SerialEntry
-        public String recivePrefix = "";
+        public String name = "New";
+
+        @SerialEntry
+        public String receivePrefix = "";
 
         @SerialEntry
         public String sendPrefix = "";

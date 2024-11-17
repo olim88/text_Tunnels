@@ -6,7 +6,8 @@ import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
-import org.olim.text_tunnels.config.configManager;
+import org.olim.text_tunnels.config.categories.tunnelManager.ConfigScreen;
+import org.olim.text_tunnels.config.ConfigManager;
 import org.olim.text_tunnels.config.configs.TextTunnelsConfig;
 import org.olim.text_tunnels.config.configs.serverConfig;
 
@@ -45,11 +46,10 @@ public class serversCategory {
 
                             .build())
 
-                    .groups(createGroups(serverConfig.channelConfigs))
-
                     .option(ButtonOption.createBuilder()
-                            .name(Text.literal("Add New Tunnel"))
-                            .action((yaclScreen, thisOption) -> addNewTunnel(serverConfig, parent))
+                            .name(Text.literal("Tunnels Config"))
+                            .text(Text.literal("Open"))
+                            .action((screen, opt) -> MinecraftClient.getInstance().setScreen(new ConfigScreen(screen, serverConfig)))
                             .build())
                     .build();
             categories.add(cat);
@@ -72,9 +72,9 @@ public class serversCategory {
                             .build())
                     .option(Option.<String>createBuilder()
                             .name(Text.literal("Receive Prefix"))
-                            .binding(channel.recivePrefix,
-                                    () -> channel.recivePrefix,
-                                    newValue -> channel.recivePrefix = newValue)
+                            .binding(channel.receivePrefix,
+                                    () -> channel.receivePrefix,
+                                    newValue -> channel.receivePrefix = newValue)
                             .controller(StringControllerBuilder::create)
                             .build())
                     .option(Option.<String>createBuilder()
@@ -87,9 +87,9 @@ public class serversCategory {
                     .option(ButtonOption.createBuilder()
                             .name(Text.literal("Delete this Tunnel"))
                             .action((yaclScreen, thisOption) -> {
-                                configManager.save();
+                                ConfigManager.save();
                                 allChannels.remove(channel);
-                                MinecraftClient.getInstance().setScreen(configManager.getConfigScreen(yaclScreen));
+                                MinecraftClient.getInstance().setScreen(ConfigManager.getConfigScreen(yaclScreen));
                             })
                             .build())
 
@@ -103,8 +103,8 @@ public class serversCategory {
 
     private static void addNewTunnel(serverConfig.ServersConfig config, Screen parent) {
         config.channelConfigs.add(new serverConfig.ChannelConfig());
-        configManager.save();
-        MinecraftClient.getInstance().setScreen(configManager.getConfigScreen(parent));
+        ConfigManager.save();
+        MinecraftClient.getInstance().setScreen(ConfigManager.getConfigScreen(parent));
     }
 
 }

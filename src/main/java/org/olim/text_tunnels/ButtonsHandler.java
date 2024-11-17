@@ -49,7 +49,7 @@ public class ButtonsHandler {
             button.setPosition(x + rowOffset, y - height - 4);
             button.setHeight(height);
             //set the width to needed
-            int width = CLIENT.textRenderer.getWidth(button.getMessage()) + 4; //+4 to account for padding
+            int width = CLIENT.textRenderer.getWidth(button.getMessage()) + 5; //+4 to account for padding and +1 for a space
             button.setWidth(width);
             rowOffset += width;
         }
