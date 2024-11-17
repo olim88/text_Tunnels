@@ -25,6 +25,7 @@ public class ButtonsHandler {
             activeButtons.add(new ButtonWidget.Builder(Text.of(buttonNames.get(i)), button -> channelUpdate(button, finalI)).build());
         }
     }
+    public static void clear() {activeButtons.clear();}
 
     private static void channelUpdate(ButtonWidget pressedButton, int index) {
         Text_tunnels.updateTunnel(index);

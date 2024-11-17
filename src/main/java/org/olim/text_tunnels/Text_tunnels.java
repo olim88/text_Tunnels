@@ -11,6 +11,7 @@ import org.olim.text_tunnels.config.configs.serverConfig;
 import org.slf4j.Logger;
 
 import java.net.SocketAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,15 +45,29 @@ public class Text_tunnels implements ClientModInitializer {
     }
 
     public static void loadForServer(String serverAddress) { //todo this breaks if no config file
+        if (!ConfigManager.get().mainConfig.enabled) {
+            clear();
+            return;
+        }
         //if the server has a config load that config
         for (serverConfig.ServersConfig server : ConfigManager.get().serversConfig.serversConfigs) {
-            if (server.ip.equals(serverAddress)) {
+            if (server.ip.equals(serverAddress) && server.enabled) {
                 LOGGER.info("[TextTunnels] loaded config for \"{}\"", serverAddress);
                 currentConfig = server;
+                List<String> names = new ArrayList<>();
+                List<String> receivePrefixes = new ArrayList<>();
+                List<String> sendPrefixes = new ArrayList<>();
+
+                for (serverConfig.ChannelConfig tunnel : server.channelConfigs) {
+                    if (!tunnel.enabled) {
+                        continue;
+                    }
+                    names.add(tunnel.name);
+                    receivePrefixes.add(tunnel.receivePrefix);
+                    sendPrefixes.add(tunnel.sendPrefix);
+                }
                 //get this list off channel names and update
-                List<String> names = server.channelConfigs.stream().map(channelConfig -> channelConfig.name).toList();
-                List<String> receivePrefixes = server.channelConfigs.stream().map(channelConfig -> channelConfig.receivePrefix).toList();
-                List<String> sendPrefixes = server.channelConfigs.stream().map(channelConfig -> channelConfig.sendPrefix).toList();
+
                 ButtonsHandler.load(names);
                 MessageReceiveHandler.load(receivePrefixes);
                 MessageSendHandler.load(sendPrefixes);
@@ -60,6 +75,12 @@ public class Text_tunnels implements ClientModInitializer {
             }
         }
         LOGGER.info("[TextTunnels] could not find config for \"{}\"", serverAddress);
+    }
+
+    public static void clear() {
+        ButtonsHandler.clear();
+        MessageReceiveHandler.clear();
+        MessageSendHandler.clear();
     }
 
 

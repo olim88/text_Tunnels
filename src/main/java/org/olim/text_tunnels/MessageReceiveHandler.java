@@ -23,6 +23,9 @@ public class MessageReceiveHandler {
         }
         currentTunnel = null;
     }
+    public static void clear() {
+        tunnels.clear();
+    }
 
     protected static void updateTunnel(String newTunnel) {
         if (tunnels.containsKey(newTunnel)) {

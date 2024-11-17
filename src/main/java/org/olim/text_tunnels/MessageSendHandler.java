@@ -19,6 +19,10 @@ public class MessageSendHandler {
         currentIndex = -1;
     }
 
+    public static void clear() {
+        sendPrefixes.clear();
+    }
+
     public static void updateIndex(int newIndex) {
         currentIndex = newIndex;
     }
