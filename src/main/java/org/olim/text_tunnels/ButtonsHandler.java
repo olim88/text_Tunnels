@@ -15,6 +15,7 @@ public class ButtonsHandler {
     private static boolean positionsSet = false;
 
     public static void load(List<String> buttonNames) {
+        positionsSet = false;
         activeButtons.clear();
         //add all button
         activeButtons.add(new ButtonWidget.Builder(Text.of("All"), button -> channelUpdate(button, -1)).build());
@@ -25,7 +26,9 @@ public class ButtonsHandler {
             activeButtons.add(new ButtonWidget.Builder(Text.of(buttonNames.get(i)), button -> channelUpdate(button, finalI)).build());
         }
     }
-    public static void clear() {activeButtons.clear();}
+    public static void clear() {
+        activeButtons.clear();
+    }
 
     private static void channelUpdate(ButtonWidget pressedButton, int index) {
         Text_tunnels.updateTunnel(index);

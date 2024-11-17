@@ -23,11 +23,7 @@ public abstract class ClientPlayerNetworkHandlerMixin {
     private void onInit(MinecraftClient client, ClientConnection clientConnection, ClientConnectionState clientConnectionState, CallbackInfo ci) {
         // Get the server's IP address from the connection
         String serverAddress = getConnection().getAddress().toString();
-        if (serverAddress.contains("/")) {
-            Text_tunnels.loadForServer(Arrays.stream(serverAddress.split("/")).findFirst().get());
-        } else {
-            Text_tunnels.loadForServer(serverAddress);
-        }
+        Text_tunnels.loadForServer(serverAddress);
 
     }
 }

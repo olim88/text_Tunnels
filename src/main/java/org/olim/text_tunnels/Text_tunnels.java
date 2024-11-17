@@ -11,10 +11,7 @@ import org.olim.text_tunnels.config.configs.serverConfig;
 import org.slf4j.Logger;
 
 import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Text_tunnels implements ClientModInitializer {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
@@ -49,11 +46,20 @@ public class Text_tunnels implements ClientModInitializer {
             clear();
             return;
         }
+        if (serverAddress.contains("/")) {
+            serverAddress = Arrays.stream(serverAddress.split("/")).findFirst().get();
+        }
         //if the server has a config load that config
         for (serverConfig.ServersConfig server : ConfigManager.get().serversConfig.serversConfigs) {
             if (server.ip.equals(serverAddress) && server.enabled) {
                 LOGGER.info("[TextTunnels] loaded config for \"{}\"", serverAddress);
                 currentConfig = server;
+                //clear everything if there are no channels
+                if (server.channelConfigs.isEmpty()) {
+                    LOGGER.info("[TextTunnels] no tunnels available to load");
+                    clear();
+                    return;
+                }
                 List<String> names = new ArrayList<>();
                 List<String> receivePrefixes = new ArrayList<>();
                 List<String> sendPrefixes = new ArrayList<>();
@@ -71,7 +77,7 @@ public class Text_tunnels implements ClientModInitializer {
                 ButtonsHandler.load(names);
                 MessageReceiveHandler.load(receivePrefixes);
                 MessageSendHandler.load(sendPrefixes);
-                break;
+                return;
             }
         }
         LOGGER.info("[TextTunnels] could not find config for \"{}\"", serverAddress);
@@ -85,7 +91,7 @@ public class Text_tunnels implements ClientModInitializer {
 
 
     public static void configUpdated() {
-        ConfigManager.save();
+
         //when the config is updated check if the player is on a sever and then reload
         ClientPlayNetworkHandler networkHandler = CLIENT.getNetworkHandler();
         if (networkHandler != null) {
@@ -132,9 +138,5 @@ public class Text_tunnels implements ClientModInitializer {
             LOGGER.info("[TextTunnels] saved new servers to config");
             ConfigManager.save();
         }
-    }
-
-    private static void loadTunnels() {
-
     }
 }

@@ -37,6 +37,7 @@ public class ConfigManager {
 
     public static void save() {
         HANDLER.save();
+        Text_tunnels.configUpdated();
     }
 
 
@@ -46,7 +47,7 @@ public class ConfigManager {
             builder.title(Text.literal("Text Tunnels Settings"))
                     .category(mainCategory.create(defaults, config))
                     .categories(serversCategory.create(defaults, config, parentScreen))
-                    .save(Text_tunnels::configUpdated)
+                    .save(ConfigManager::save)
                     .build();
             return builder;
 
