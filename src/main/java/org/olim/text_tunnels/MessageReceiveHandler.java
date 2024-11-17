@@ -56,4 +56,7 @@ public class MessageReceiveHandler {
         return true;
     }
 
+    public static boolean isFilterInActive() {
+        return currentTunnel == null;
+    }
 }

@@ -3,6 +3,7 @@ package org.olim.text_tunnels;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.ServerList;
@@ -30,6 +31,8 @@ public class Text_tunnels implements ClientModInitializer {
             MessageReceiveHandler.updateTunnel(null);
         }
         MessageSendHandler.updateIndex(index);
+        //make sure scrolling is reset
+        CLIENT.inGameHud.getChatHud().scroll(0);
     }
 
 

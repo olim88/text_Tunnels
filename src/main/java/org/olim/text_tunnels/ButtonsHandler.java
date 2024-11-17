@@ -12,6 +12,7 @@ public class ButtonsHandler {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     private static final List<ButtonWidget> activeButtons = new ArrayList<>();
+    private static boolean positionsSet = false;
 
     public static void load(List<String> buttonNames) {
         activeButtons.clear();
@@ -39,7 +40,10 @@ public class ButtonsHandler {
     }
 
 
-    public static void updatePositions(int x, int y, int height) {
+    public static void updatePositions(int x, int y, int height, boolean isResize) {
+        if (!isResize && positionsSet) {
+            return;
+        }
         int rowOffset = 0;
         for (ButtonWidget button : activeButtons) {
             button.setPosition(x + rowOffset, y - height - 4);
@@ -51,7 +55,9 @@ public class ButtonsHandler {
         }
         //focus selected button (assume first is)
         updateFocus(activeButtons.getFirst());
+        positionsSet = true;
     }
+
 
     private static void updateFocus(ButtonWidget active) {
         for (ButtonWidget button : activeButtons) {

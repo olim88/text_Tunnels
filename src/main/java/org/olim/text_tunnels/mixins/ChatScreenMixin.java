@@ -1,6 +1,5 @@
 package org.olim.text_tunnels.mixins;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -11,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.w3c.dom.Text;
 
 @Mixin(ChatScreen.class)
 public class ChatScreenMixin {
@@ -19,9 +17,13 @@ public class ChatScreenMixin {
     @Shadow
     protected TextFieldWidget chatField;
 
+    @Inject(method = "resize", at = @At("RETURN"))
+    private void afterResize(CallbackInfo ci) {
+        ButtonsHandler.updatePositions(chatField.getX(), chatField.getY(), chatField.getHeight(), true);
+    }
     @Inject(method = "init", at = @At("RETURN"))
     private void afterInit(CallbackInfo ci) {
-        ButtonsHandler.updatePositions(chatField.getX(), chatField.getY(), chatField.getHeight());
+        ButtonsHandler.updatePositions(chatField.getX(), chatField.getY(), chatField.getHeight(), false);
     }
 
     @Inject(method = "render", at = @At("RETURN"))
