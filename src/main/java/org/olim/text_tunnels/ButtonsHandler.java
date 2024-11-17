@@ -42,7 +42,7 @@ public class ButtonsHandler {
 
 
     public static void updatePositions(int x, int y, int height, boolean isResize) {
-        if (!isResize && positionsSet) {
+        if (!isResize && positionsSet || activeButtons.isEmpty()) {
             return;
         }
         int rowOffset = 0;

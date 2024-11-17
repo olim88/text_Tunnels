@@ -12,6 +12,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Arrays;
+
 @Mixin(ClientPlayNetworkHandler.class)
 public abstract class ClientPlayerNetworkHandlerMixin {
 
@@ -21,6 +23,11 @@ public abstract class ClientPlayerNetworkHandlerMixin {
     private void onInit(MinecraftClient client, ClientConnection clientConnection, ClientConnectionState clientConnectionState, CallbackInfo ci) {
         // Get the server's IP address from the connection
         String serverAddress = getConnection().getAddress().toString();
-        Text_tunnels.loadForServer(serverAddress);
+        if (serverAddress.contains("/")) {
+            Text_tunnels.loadForServer(Arrays.stream(serverAddress.split("/")).findFirst().get());
+        } else {
+            Text_tunnels.loadForServer(serverAddress);
+        }
+
     }
 }
