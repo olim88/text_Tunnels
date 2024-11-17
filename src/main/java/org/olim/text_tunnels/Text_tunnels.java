@@ -4,8 +4,6 @@ import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.option.ServerList;
 import org.olim.text_tunnels.config.ConfigManager;
 import org.olim.text_tunnels.config.configs.serverConfig;
 import org.slf4j.Logger;
@@ -23,7 +21,7 @@ public class Text_tunnels implements ClientModInitializer {
     public static void updateTunnel(int index) {
         //finds the regex linked and send to message handler
         if (index != -1) {
-            MessageReceiveHandler.updateTunnel(currentConfig.channelConfigs.get(index).receivePrefix);
+            MessageReceiveHandler.updateTunnel(currentConfig.tunnelConfigs.get(index).receivePrefix);
         } else {
             MessageReceiveHandler.updateTunnel(null);
         }
@@ -38,7 +36,7 @@ public class Text_tunnels implements ClientModInitializer {
         //load config
         ConfigManager.init();
         LOGGER.info("[TextTunnels] Text Tunnels Mod Initialized!");
-        getServerList();
+        ManageServerConfigs.updateSeverList();
     }
 
     public static void loadForServer(String serverAddress) { //todo this breaks if no config file
@@ -55,7 +53,7 @@ public class Text_tunnels implements ClientModInitializer {
                 LOGGER.info("[TextTunnels] loaded config for \"{}\"", serverAddress);
                 currentConfig = server;
                 //clear everything if there are no channels
-                if (server.channelConfigs.isEmpty()) {
+                if (server.tunnelConfigs.isEmpty()) {
                     LOGGER.info("[TextTunnels] no tunnels available to load");
                     clear();
                     return;
@@ -64,7 +62,7 @@ public class Text_tunnels implements ClientModInitializer {
                 List<String> receivePrefixes = new ArrayList<>();
                 List<String> sendPrefixes = new ArrayList<>();
 
-                for (serverConfig.ChannelConfig tunnel : server.channelConfigs) {
+                for (serverConfig.TunnelConfig tunnel : server.tunnelConfigs) {
                     if (!tunnel.enabled) {
                         continue;
                     }
@@ -102,41 +100,5 @@ public class Text_tunnels implements ClientModInitializer {
         }
     }
 
-    public void getServerList() {
-        // Get the current Minecraft client instance
-        MinecraftClient client = MinecraftClient.getInstance();
 
-        // Create a new ServerList instance using the client's options
-        ServerList serverList = new ServerList(client);
-
-        // Load the servers from the servers.dat file
-        serverList.loadFile();
-        LOGGER.info("[TextTunnels] found {} serves", serverList.size());
-
-        //get a ditnary of ips and names of the found servers
-        Map<String, String> usersSevers = new HashMap<>();
-        for (int i = 0; i < serverList.size(); i++) {
-            ServerInfo serverInfo = serverList.get(i);
-            usersSevers.put(serverInfo.address, serverInfo.name);
-        }
-
-        //update config if there are new servers
-        for (serverConfig.ServersConfig existingConfig : ConfigManager.get().serversConfig.serversConfigs) {
-            //if config for ip do not need to keep it to add
-            usersSevers.remove(existingConfig.ip);
-        }
-
-        //any ips left will be new and need to be added to settings
-        for (Map.Entry<String, String> server : usersSevers.entrySet()) {
-            LOGGER.info("[TextTunnels] found new server with ip: {}", server.getKey());
-            serverConfig.ServersConfig newConfig = new serverConfig.ServersConfig();
-            newConfig.ip = server.getKey();
-            newConfig.name = server.getValue();
-            ConfigManager.get().serversConfig.serversConfigs.add(newConfig);
-        }
-        if (!usersSevers.isEmpty()) {
-            LOGGER.info("[TextTunnels] saved new servers to config");
-            ConfigManager.save();
-        }
-    }
 }

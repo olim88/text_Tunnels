@@ -21,10 +21,10 @@ public class serverConfig {
         public boolean enabled = true;
 
         @SerialEntry
-        public List<ChannelConfig> channelConfigs = List.of(new ChannelConfig());
+        public List<TunnelConfig> tunnelConfigs = List.of(new TunnelConfig());
     }
 
-    public static class ChannelConfig {
+    public static class TunnelConfig {
         @SerialEntry
         public boolean enabled = true;
 
@@ -36,5 +36,13 @@ public class serverConfig {
 
         @SerialEntry
         public String sendPrefix = "";
+
+
+        public TunnelConfig() {}
+        public TunnelConfig(String name, String receivePrefix, String sendPrefix) {
+            this.name = name;
+            this.receivePrefix = receivePrefix;
+            this.sendPrefix = sendPrefix;
+        }
     }
 }

@@ -26,7 +26,7 @@ public class ConfigScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        TunnelsListWidget = new coinfgListWidget(client, this, config.channelConfigs , width, height - 96, 32, 25);
+        TunnelsListWidget = new coinfgListWidget(client, this, config.tunnelConfigs, width, height - 96, 32, 25);
         addDrawableChild(TunnelsListWidget);
 
         GridWidget gridWidget = new GridWidget();

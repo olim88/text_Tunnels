@@ -57,9 +57,9 @@ public class serversCategory {
         return categories;
     }
 
-    private static List<OptionGroup> createGroups(List<serverConfig.ChannelConfig> allChannels) {
+    private static List<OptionGroup> createGroups(List<serverConfig.TunnelConfig> allChannels) {
         List<OptionGroup> groups = new ArrayList<>(allChannels.size());
-        for (org.olim.text_tunnels.config.configs.serverConfig.ChannelConfig channel : allChannels) {
+        for (serverConfig.TunnelConfig channel : allChannels) {
             OptionGroup group = (OptionGroup.createBuilder()
                     .name(Text.translatable("Tunnel Rule: " + channel.name))
                     .collapsed(false)
@@ -102,7 +102,7 @@ public class serversCategory {
     }
 
     private static void addNewTunnel(serverConfig.ServersConfig config, Screen parent) {
-        config.channelConfigs.add(new serverConfig.ChannelConfig());
+        config.tunnelConfigs.add(new serverConfig.TunnelConfig());
         ConfigManager.save();
         MinecraftClient.getInstance().setScreen(ConfigManager.getConfigScreen(parent));
     }

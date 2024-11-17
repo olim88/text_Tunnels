@@ -25,9 +25,9 @@ public class TunnelConfigScreen extends Screen {
 
 
     private final Screen parent;
-    private final serverConfig.ChannelConfig config;
+    private final serverConfig.TunnelConfig config;
 
-    protected TunnelConfigScreen(Screen parent, serverConfig.ChannelConfig config) {
+    protected TunnelConfigScreen(Screen parent, serverConfig.TunnelConfig config) {
         super(Text.literal("Tunnel Config"));
 
         this.parent = parent;
