@@ -5,6 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientConnectionState;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.ClientConnection;
+import org.olim.text_tunnels.ManageServerConfigs;
 import org.olim.text_tunnels.Text_tunnels;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,6 +22,11 @@ public abstract class ClientPlayerNetworkHandlerMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void onInit(MinecraftClient client, ClientConnection clientConnection, ClientConnectionState clientConnectionState, CallbackInfo ci) {
+        //a player just connected to a sever
+
+        //make sure server is in config
+        ManageServerConfigs.updateSeverList();
+
         // Get the server's IP address from the connection
         String serverAddress = getConnection().getAddress().toString();
         Text_tunnels.loadForServer(serverAddress);

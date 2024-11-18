@@ -8,6 +8,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.olim.text_tunnels.ManageServerConfigs;
 import org.olim.text_tunnels.Text_tunnels;
 import org.olim.text_tunnels.config.categories.mainCategory;
 import org.olim.text_tunnels.config.categories.serversCategory;
@@ -43,10 +44,11 @@ public class ConfigManager {
 
 
     public static Screen getConfigScreen(Screen parentScreen) {
+        ManageServerConfigs.updateSeverList();
         return YetAnotherConfigLib.create(HANDLER, (defaults, config, builder) -> {
             builder.title(Text.literal("Text Tunnels Settings"))
                     .category(mainCategory.create(defaults, config))
-                    .categories(serversCategory.create(defaults, config, parentScreen))
+                    .categories(serversCategory.create(defaults, config))
                     .save(ConfigManager::save)
                     .build();
             return builder;

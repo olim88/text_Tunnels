@@ -5,7 +5,8 @@ import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import org.olim.text_tunnels.config.ConfigManager;
-import org.olim.text_tunnels.config.configs.serverConfig;
+import org.olim.text_tunnels.config.configs.ServersConfig;
+import org.olim.text_tunnels.config.configs.TunnelConfig;
 import org.slf4j.Logger;
 
 import java.net.SocketAddress;
@@ -16,7 +17,7 @@ public class Text_tunnels implements ClientModInitializer {
     private static final Logger LOGGER = LogUtils.getLogger();
 
 
-    private static serverConfig.ServersConfig currentConfig;
+    private static ServersConfig currentConfig;
 
     public static void updateTunnel(int index) {
         //finds the regex linked and send to message handler
@@ -36,10 +37,10 @@ public class Text_tunnels implements ClientModInitializer {
         //load config
         ConfigManager.init();
         LOGGER.info("[TextTunnels] Text Tunnels Mod Initialized!");
-        ManageServerConfigs.updateSeverList();
+
     }
 
-    public static void loadForServer(String serverAddress) { //todo this breaks if no config file
+    public static void loadForServer(String serverAddress) {
         if (!ConfigManager.get().mainConfig.enabled) {
             clear();
             return;
@@ -48,7 +49,7 @@ public class Text_tunnels implements ClientModInitializer {
             serverAddress = Arrays.stream(serverAddress.split("/")).findFirst().get();
         }
         //if the server has a config load that config
-        for (serverConfig.ServersConfig server : ConfigManager.get().serversConfig.serversConfigs) {
+        for (ServersConfig server : ConfigManager.get().serversConfigs) {
             if (server.ip.equals(serverAddress) && server.enabled) {
                 LOGGER.info("[TextTunnels] loaded config for \"{}\"", serverAddress);
                 currentConfig = server;
@@ -62,7 +63,7 @@ public class Text_tunnels implements ClientModInitializer {
                 List<String> receivePrefixes = new ArrayList<>();
                 List<String> sendPrefixes = new ArrayList<>();
 
-                for (serverConfig.TunnelConfig tunnel : server.tunnelConfigs) {
+                for (TunnelConfig tunnel : server.tunnelConfigs) {
                     if (!tunnel.enabled) {
                         continue;
                     }

@@ -12,16 +12,16 @@ import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import org.olim.text_tunnels.config.ConfigManager;
-import org.olim.text_tunnels.config.configs.serverConfig;
+import org.olim.text_tunnels.config.configs.TunnelConfig;
 
 import java.awt.*;
 import java.util.List;
 
 public class coinfgListWidget extends ElementListWidget<coinfgListWidget.AbstractEntry> {
     private final ConfigScreen screen;
-    private final List<serverConfig.TunnelConfig> allChannels;
+    private final List<TunnelConfig> allChannels;
 
-    public coinfgListWidget(MinecraftClient minecraftClient, ConfigScreen screen, List<serverConfig.TunnelConfig> allChannels, int i, int j, int k, int l) {
+    public coinfgListWidget(MinecraftClient minecraftClient, ConfigScreen screen, List<TunnelConfig> allChannels, int i, int j, int k, int l) {
         super(minecraftClient, i, j, k, l);
         this.screen = screen;
         this.allChannels = allChannels;
@@ -29,7 +29,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
         //add labels
         addEntry(new LabelsEntry());
         //add tunnels
-        for (serverConfig.TunnelConfig tunnel : allChannels) {
+        for (TunnelConfig tunnel : allChannels) {
             addEntry(new TunnelEntry(tunnel));
         }
     }
@@ -37,7 +37,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
     protected void addRuleAfterSelected() {
         int newIndex = Math.max(children().indexOf(getSelectedOrNull()), 0);
 
-        allChannels.add(newIndex,new serverConfig.TunnelConfig());
+        allChannels.add(newIndex,new TunnelConfig());
         children().add(newIndex + 1, new TunnelEntry(allChannels.get(newIndex)));
     }
 
@@ -82,7 +82,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
     }
     private class TunnelEntry extends AbstractEntry {
         //data
-        private final serverConfig.TunnelConfig tunnel;
+        private final TunnelConfig tunnel;
 
         private final List<? extends Element> children;
 
@@ -97,7 +97,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
         private double oldScrollAmount = 0;
 
 
-        public TunnelEntry( serverConfig.TunnelConfig tunnel) {
+        public TunnelEntry( TunnelConfig tunnel) {
             this.tunnel = tunnel;
 
             enabledButton = ButtonWidget.builder(enabledButtonText(), a -> toggleEnabled())

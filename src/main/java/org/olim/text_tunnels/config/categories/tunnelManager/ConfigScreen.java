@@ -8,15 +8,15 @@ import net.minecraft.client.gui.widget.SimplePositioningWidget;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import org.olim.text_tunnels.config.ConfigManager;
-import org.olim.text_tunnels.config.configs.serverConfig;
+import org.olim.text_tunnels.config.configs.ServersConfig;
 
 public class ConfigScreen extends Screen {
 
     private coinfgListWidget TunnelsListWidget;
     private final Screen parent;
-    private final serverConfig.ServersConfig config;
+    private final ServersConfig config;
 
-    public ConfigScreen(Screen parent, serverConfig.ServersConfig serverConfig) {
+    public ConfigScreen(Screen parent, ServersConfig serverConfig) {
         super(Text.literal("Tunnels config for: \""+serverConfig.name+"\""));
         this.parent = parent;
         config = serverConfig;

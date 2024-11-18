@@ -6,7 +6,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 import org.olim.text_tunnels.config.ConfigManager;
-import org.olim.text_tunnels.config.configs.serverConfig;
+import org.olim.text_tunnels.config.configs.TunnelConfig;
 
 public class TunnelConfigScreen extends Screen {
     private static final int PADDING = 30;
@@ -25,9 +25,9 @@ public class TunnelConfigScreen extends Screen {
 
 
     private final Screen parent;
-    private final serverConfig.TunnelConfig config;
+    private final TunnelConfig config;
 
-    protected TunnelConfigScreen(Screen parent, serverConfig.TunnelConfig config) {
+    protected TunnelConfigScreen(Screen parent, TunnelConfig config) {
         super(Text.literal("Tunnel Config"));
 
         this.parent = parent;
