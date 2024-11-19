@@ -26,6 +26,16 @@ public class MessageReceiveHandler {
         ClientReceiveMessageEvents.ALLOW_GAME.register(MessageReceiveHandler::addMessage);
     }
 
+
+    public static void load(List<String> channelReceivePrefix) {
+        receivePrefixs = channelReceivePrefix;
+        tunnels.clear();
+        for (int i = 0; i < channelReceivePrefix.size(); i++) {
+            tunnels.put(i, new ArrayList<>());
+        }
+        currentTunnel = -1;
+    }
+
     private static boolean addMessage(Text message, boolean b) {
         String plainText = Formatting.strip(message.getString());
         for (int index : tunnels.keySet()) {
@@ -40,15 +50,6 @@ public class MessageReceiveHandler {
         }
         //if tunnel can not be found do not add it to tunnel
         return true;
-    }
-
-
-    public static void load(List<String> channelReceivePrefix) {
-        MessageReceiveHandler.receivePrefixs = channelReceivePrefix;
-        for (int i = 0; i < channelReceivePrefix.size(); i++) {
-            tunnels.putIfAbsent(i, new ArrayList<>());
-        }
-        currentTunnel = -1;
     }
 
     public static void clear() {

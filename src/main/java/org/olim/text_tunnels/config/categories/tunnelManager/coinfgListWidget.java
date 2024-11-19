@@ -113,7 +113,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
                     //.tooltip(Tooltip.of(Text.translatable("skyblocker.config.chat.chatRules.screen.editRule.@Tooltip")))todo
                     .build();
 
-            deleteButton = ButtonWidget.builder(Text.translatable("selectServer.delete"), a -> { //todo only part of the button can be clicked
+            deleteButton = ButtonWidget.builder(Text.translatable("selectServer.delete"), a -> {
                         oldScrollAmount = getScrollAmount();
                         client.setScreen(new ConfirmScreen(this::deleteEntry, Text.literal("Are you sure you want to delete this tunnel?"), Text.literal("Tunnel "+tunnel.name + "will be lost forever! (A long time!)"), Text.translatable("selectServer.deleteButton"), ScreenTexts.CANCEL));
                     })
@@ -180,9 +180,5 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
             context.drawCenteredTextWithShadow(client.textRenderer, tunnel.name, nameX, y + 5, 0xFFFFFFFF);
         }
 
-        public boolean isChange() {
-            //return (!tunnel.enabled(configManager.chatRuleList.get(chatRuleIndex).getEnabled())); todo
-            return false;
-        }
     }
 }
