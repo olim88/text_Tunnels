@@ -38,6 +38,10 @@ public class ChatScreenMixin {
 
     @ModifyVariable(method = "sendMessage", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     private String sendMessage(String chatText) {
+        //do not try to edit commands;
+        if (chatText.startsWith("/")){
+            return chatText;
+        }
         return MessageSendHandler.getPrefix() + chatText;
     }
 }

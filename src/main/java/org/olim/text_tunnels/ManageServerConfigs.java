@@ -20,10 +20,12 @@ public class ManageServerConfigs {
 
     private static final Map<String, List<TunnelConfig>> DEFAULT_CONFIGS = Map.ofEntries(
             Map.entry("mc.hypixel.net", List.of(
-                    new TunnelConfig("Guild", "Guild", "/guild"),
-                    new TunnelConfig("Party", "Party", "/pc")
+                    new TunnelConfig("Guild", "Guild >", "/gc "),
+                    new TunnelConfig("Party", "Party >", "/pc "),
+                    new TunnelConfig("Private", "(From|To) \\[\\w+\\+?\\] (.+):", "/msg $2 ")
             ))
     );
+
     public static void updateSeverList() {
         // Get the current Minecraft client instance
         MinecraftClient client = MinecraftClient.getInstance();
@@ -43,13 +45,26 @@ public class ManageServerConfigs {
         }
 
         //update config if there are new servers or create new list if empty
-        if(ConfigManager.get().serversConfigs !=  null) {
+        List<ServersConfig> toDelete = new ArrayList<>();
+        if (ConfigManager.get().serversConfigs != null && !ConfigManager.get().serversConfigs.isEmpty()) {
             for (ServersConfig existingConfig : ConfigManager.get().serversConfigs) {
+                //if there is no longer an ip for the server set it to be deleted
+                if (!usersSevers.containsKey(existingConfig.ip)) {
+                    toDelete.add(existingConfig);
+                    continue;
+                }
+                //make sure the name is upto date in the coinfig
+                existingConfig.name = usersSevers.get(existingConfig.ip);
                 //if config for ip do not need to keep it to add
                 usersSevers.remove(existingConfig.ip);
             }
         } else {
             ConfigManager.get().serversConfigs = new ArrayList<>(usersSevers.size());
+        }
+
+        //delete needed servers
+        for (ServersConfig config : toDelete) {
+            ConfigManager.get().serversConfigs.remove(config);
         }
 
 

@@ -3,45 +3,55 @@ package org.olim.text_tunnels;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MessageReceiveHandler {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final Map<String, List<Integer>> tunnels = new HashMap<>();
-    private static String currentTunnel;
+    private static final Map<Integer, List<Integer>> tunnels = new HashMap<>();
+    private static List<String> receivePrefixs;
+    private static int currentTunnel;
 
     public static void load(List<String> channelReceivePrefix) {
-        for (String name : channelReceivePrefix) {
-            tunnels.putIfAbsent(name, new ArrayList<>());
+        MessageReceiveHandler.receivePrefixs = channelReceivePrefix;
+        for (int i =0; i < channelReceivePrefix.size(); i++) {
+            tunnels.putIfAbsent(i, new ArrayList<>());
         }
-        currentTunnel = null;
+        currentTunnel = -1;
     }
     public static void clear() {
         tunnels.clear();
     }
 
-    protected static void updateTunnel(String newTunnel) {
+    protected static void updateTunnel(int newTunnel) {
         if (tunnels.containsKey(newTunnel)) {
             currentTunnel = newTunnel;
             LOGGER.info("[TextTunnels] switching to tunnel \"{}\"", newTunnel);
             return;
         }
-        //if trying to set to non-existent tunnel set to null
-        currentTunnel = null;
+        //if trying to set to non-existent tunnel set to -1
+        currentTunnel = -1;
         LOGGER.info("[TextTunnels] trying to show non existent tunnel \"{}\"", newTunnel);
     }
 
     public static void addMessage(Text message) {
-        for (String receivePrefix : tunnels.keySet()) {
-            if (message.getString().matches("^" + receivePrefix + ".*")) { //todo should this be regex or just starts with
-                tunnels.get(receivePrefix).add(CLIENT.inGameHud.getTicks());
+        String plainText = Formatting.strip(message.getString());
+        for (int index : tunnels.keySet()) {
+            Pattern pattern = Pattern.compile("^" + receivePrefixs.get(index)); //todo have this precompiled and makesure impropper regex is hanndelded
+            Matcher match = pattern.matcher(plainText);
+            if (match.find()) {
+                tunnels.get(index).add(CLIENT.inGameHud.getTicks());
+                //send match data to message sender for if it needs it to send message
+                Text_tunnels.updateLastMatch(index,match); //todo implement this
 
             }
         }
@@ -60,6 +70,6 @@ public class MessageReceiveHandler {
     }
 
     public static boolean isFilterInActive() {
-        return currentTunnel == null;
+        return currentTunnel == -1;
     }
 }

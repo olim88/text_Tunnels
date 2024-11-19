@@ -22,6 +22,7 @@ public class serversCategory {
         List<ConfigCategory> categories = new ArrayList<>(allServers.size());
         for (ServersConfig serverConfig : allServers) {
             ConfigCategory cat = ConfigCategory.createBuilder()
+                    .option(LabelOption.create(Text.literal("Server IP: "+serverConfig.ip)))
                     .name(Text.literal(serverConfig.name))
                     .tooltip(Text.literal("config for " + serverConfig.name))
                     .option(Option.<Boolean>createBuilder()
@@ -29,21 +30,6 @@ public class serversCategory {
                             .description(OptionDescription.of(Text.literal("Toggle Text Tunnels for this server")))
                             .binding(true, () -> serverConfig.enabled, newVal -> serverConfig.enabled = newVal)
                             .controller(TickBoxControllerBuilder::create)
-                            .build())
-                    .option(Option.<String>createBuilder()
-                            .name(Text.literal("Server Name"))
-                            .binding(serverConfig.name,
-                                    () -> serverConfig.name,
-                                    newValue -> serverConfig.name = newValue)
-                            .controller(StringControllerBuilder::create)
-                            .build())
-                    .option(Option.<String>createBuilder()
-                            .name(Text.literal("Server Ip"))
-                            .binding(serverConfig.ip,
-                                    () -> serverConfig.ip,
-                                    newValue -> serverConfig.ip = newValue)
-                            .controller(StringControllerBuilder::create)
-
                             .build())
 
                     .option(ButtonOption.createBuilder()

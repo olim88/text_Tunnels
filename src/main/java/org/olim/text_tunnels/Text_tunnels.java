@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import java.net.SocketAddress;
 import java.util.*;
+import java.util.regex.Matcher;
 
 public class Text_tunnels implements ClientModInitializer {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
@@ -21,14 +22,14 @@ public class Text_tunnels implements ClientModInitializer {
 
     public static void updateTunnel(int index) {
         //finds the regex linked and send to message handler
-        if (index != -1) {
-            MessageReceiveHandler.updateTunnel(currentConfig.tunnelConfigs.get(index).receivePrefix);
-        } else {
-            MessageReceiveHandler.updateTunnel(null);
-        }
+        MessageReceiveHandler.updateTunnel(index);
         MessageSendHandler.updateIndex(index);
         //make sure scrolling is reset
         CLIENT.inGameHud.getChatHud().scroll(0);
+    }
+
+    public static void updateLastMatch(int index, Matcher match) {
+        MessageSendHandler.updateLastMatch(index, match);
     }
 
 
@@ -50,7 +51,7 @@ public class Text_tunnels implements ClientModInitializer {
         }
         //if the server has a config load that config
         for (ServersConfig server : ConfigManager.get().serversConfigs) {
-            if (server.ip.equals(serverAddress) && server.enabled) {
+            //if (server.ip.equals(serverAddress) && server.enabled) { todo remove
                 LOGGER.info("[TextTunnels] loaded config for \"{}\"", serverAddress);
                 currentConfig = server;
                 //clear everything if there are no channels
@@ -77,7 +78,7 @@ public class Text_tunnels implements ClientModInitializer {
                 MessageReceiveHandler.load(receivePrefixes);
                 MessageSendHandler.load(sendPrefixes);
                 return;
-            }
+            //}
         }
         LOGGER.info("[TextTunnels] could not find config for \"{}\"", serverAddress);
     }
