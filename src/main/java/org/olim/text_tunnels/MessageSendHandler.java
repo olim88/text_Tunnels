@@ -13,7 +13,7 @@ public class MessageSendHandler {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Pattern GROUP_PATTERN = Pattern.compile("\\$\\d+");
 
-    private static final Map<Integer, Matcher> lastMatches = new HashMap<>();
+    private static final Map<Integer, Matcher> lastIncomingMatch = new HashMap<>();
     private static List<String> sendPrefixes;
     private static int currentIndex;
 
@@ -25,7 +25,7 @@ public class MessageSendHandler {
 
     public static void clear() {
         sendPrefixes.clear();
-        lastMatches.clear();
+        lastIncomingMatch.clear();
     }
 
     public static void updateIndex(int newIndex) {
@@ -40,20 +40,29 @@ public class MessageSendHandler {
 
         if (currentIndex < sendPrefixes.size()) {
             String prefix = sendPrefixes.get(currentIndex);
-            //see if there are patterns in the send string to be replaced with relivent data
-            boolean hasData = lastMatches.containsKey(currentIndex);
+            //see if there are patterns in the send string to be replaced with relevant data
+            boolean hasData = lastIncomingMatch.containsKey(currentIndex);
+            Matcher replacements = lastIncomingMatch.get(currentIndex);
             Matcher groupMatch = GROUP_PATTERN.matcher(prefix);
-            //todo make sure there are enough groups in last matches for this to work
+
             while (groupMatch.find()) {
                 String foundGroup = groupMatch.group();
                 if (hasData) {
                     int index = Integer.parseInt(foundGroup.substring(1));
-                    prefix = prefix.replace(foundGroup, lastMatches.get(currentIndex).group(index));
-                    continue;
+                    if (index > replacements.groupCount()) {
+                        LOGGER.error("[TextTunnels] not enough groups in receive prefix to fill in send prefix");
+                        LOGGER.error("[TextTunnels] can not get group {} out of {} groups",index, replacements.groupCount());
+
+                    } else {
+                        prefix = prefix.replace(foundGroup, replacements.group(index));
+                        continue;
+                    }
                 }
                 //if there is no data yet to go of just replace with empty string
-                LOGGER.info("[TextTunnels] Can not replace group with out existing matched message");
-                prefix = prefix.replace(foundGroup, "");
+                else {
+                    LOGGER.info("[TextTunnels] Can not replace group with out existing matched message");
+                }
+                prefix = prefix.replace(foundGroup, "");//todo tell the user about this
 
 
             }
@@ -65,6 +74,6 @@ public class MessageSendHandler {
     }
 
     public static void updateLastMatch(int index, Matcher match) {
-        lastMatches.put(index, match);
+        lastIncomingMatch.put(index, match);
     }
 }

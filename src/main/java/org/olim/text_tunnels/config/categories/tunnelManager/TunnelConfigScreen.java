@@ -15,7 +15,6 @@ public class TunnelConfigScreen extends Screen {
     private TextFieldWidget nameInput;
     private TextFieldWidget recivePrefixInput;
     private TextFieldWidget sendPrefixInput;
-    private ButtonWidget finishButton;
 
     //text locations
     private int nameLabelY;
@@ -46,6 +45,7 @@ public class TunnelConfigScreen extends Screen {
         heightOffset += SPACING / 2;
         nameInput = new TextFieldWidget(client.textRenderer, PADDING, heightOffset, usableWidth, 20, Text.of(config.name));
         nameInput.setText(config.name);
+        nameInput.setMaxLength(100);
         heightOffset += SPACING;
         addDrawableChild(nameInput);
 
@@ -54,6 +54,7 @@ public class TunnelConfigScreen extends Screen {
         heightOffset += SPACING / 2;
         recivePrefixInput = new TextFieldWidget(client.textRenderer, PADDING, heightOffset, usableWidth, 20, Text.of(config.receivePrefix));
         recivePrefixInput.setText(config.receivePrefix);
+        recivePrefixInput.setMaxLength(100);
         heightOffset += SPACING;
         addDrawableChild(recivePrefixInput);
 
@@ -62,11 +63,12 @@ public class TunnelConfigScreen extends Screen {
         heightOffset += SPACING / 2;
         sendPrefixInput = new TextFieldWidget(client.textRenderer, PADDING, heightOffset, usableWidth, 20, Text.of(config.sendPrefix));
         sendPrefixInput.setText(config.sendPrefix);
+        sendPrefixInput.setMaxLength(100);
         addDrawableChild(sendPrefixInput);
 
 
         //finish
-        finishButton = ButtonWidget.builder(Text.literal("Finish"),button -> close())
+        ButtonWidget finishButton = ButtonWidget.builder(Text.literal("Finish"), button -> close())
                 .width(usableWidth)
                 .position(PADDING, this.height - PADDING - 20)
                 .build();

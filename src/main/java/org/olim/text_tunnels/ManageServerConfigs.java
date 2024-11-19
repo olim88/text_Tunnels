@@ -22,7 +22,7 @@ public class ManageServerConfigs {
             Map.entry("mc.hypixel.net", List.of(
                     new TunnelConfig("Guild", "Guild >", "/gc "),
                     new TunnelConfig("Party", "Party >", "/pc "),
-                    new TunnelConfig("Private", "(From|To) \\[\\w+\\+?\\] (.+):", "/msg $2 ")
+                    new TunnelConfig("Private", "(From|To)( \\[(VIP|MVP)\\+?\\])? (.[^\\s]+):", "/msg $4 ")
             ))
     );
 
