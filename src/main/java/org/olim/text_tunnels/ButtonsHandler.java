@@ -44,8 +44,8 @@ public class ButtonsHandler {
     }
 
 
-    public static void updatePositions(int x, int y, int height, boolean isResize) {
-        if (!isResize && positionsSet || activeButtons.isEmpty()) {
+    public static void updatePositions(int x, int y, int height) {
+        if (activeButtons.isEmpty()) {
             return;
         }
         int rowOffset = 0;
@@ -57,9 +57,12 @@ public class ButtonsHandler {
             button.setWidth(width);
             rowOffset += width;
         }
-        //focus selected button (assume first is)
-        updateFocus(activeButtons.getFirst());
-        positionsSet = true;
+        if (!positionsSet) {
+            //focus selected button (assume first is)
+            updateFocus(activeButtons.getFirst());
+            positionsSet = true;
+        }
+
     }
 
 

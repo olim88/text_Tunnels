@@ -19,11 +19,11 @@ public class ChatScreenMixin {
 
     @Inject(method = "resize", at = @At("RETURN"))
     private void afterResize(CallbackInfo ci) {
-        ButtonsHandler.updatePositions(chatField.getX(), chatField.getY(), chatField.getHeight(), true);
+        ButtonsHandler.updatePositions(chatField.getX(), chatField.getY(), chatField.getHeight());
     }
     @Inject(method = "init", at = @At("RETURN"))
     private void afterInit(CallbackInfo ci) {
-        ButtonsHandler.updatePositions(chatField.getX(), chatField.getY(), chatField.getHeight(), false);
+        ButtonsHandler.updatePositions(chatField.getX(), chatField.getY(), chatField.getHeight());
     }
 
     @Inject(method = "render", at = @At("RETURN"))
