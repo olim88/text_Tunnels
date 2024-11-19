@@ -12,8 +12,7 @@ public class mainCategory {
 
     public static ConfigCategory create (TextTunnelsConfig defaults, TextTunnelsConfig config) {
         return ConfigCategory.createBuilder()
-                .name(Text.literal("Main settings"))
-                .tooltip(Text.literal("somthing"))
+                .name(Text.literal("Main settings")) //todo add tooltips
                 .group(OptionGroup.createBuilder()
                         .option(Option.<Boolean>createBuilder()
                                 .name(Text.literal("Enable Text Tunnels"))

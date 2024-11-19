@@ -1,6 +1,7 @@
 package org.olim.text_tunnels;
 
 import com.mojang.logging.LogUtils;
+import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -21,13 +22,35 @@ public class MessageReceiveHandler {
     private static List<String> receivePrefixs;
     private static int currentTunnel;
 
+    public static void init() {
+        ClientReceiveMessageEvents.ALLOW_GAME.register(MessageReceiveHandler::addMessage);
+    }
+
+    private static boolean addMessage(Text message, boolean b) {
+        String plainText = Formatting.strip(message.getString());
+        for (int index : tunnels.keySet()) {
+            Pattern pattern = Pattern.compile("^" + receivePrefixs.get(index)); //todo have this precompiled and makesure impropper regex is hanndelded
+            Matcher match = pattern.matcher(plainText);
+            if (match.find()) {
+                tunnels.get(index).add(CLIENT.inGameHud.getTicks());
+                //send match data to message sender for if it needs it to send message
+                Text_tunnels.updateLastMatch(index, match);
+
+            }
+        }
+        //if tunnel can not be found do not add it to tunnel
+        return true;
+    }
+
+
     public static void load(List<String> channelReceivePrefix) {
         MessageReceiveHandler.receivePrefixs = channelReceivePrefix;
-        for (int i =0; i < channelReceivePrefix.size(); i++) {
+        for (int i = 0; i < channelReceivePrefix.size(); i++) {
             tunnels.putIfAbsent(i, new ArrayList<>());
         }
         currentTunnel = -1;
     }
+
     public static void clear() {
         tunnels.clear();
     }
@@ -41,23 +64,6 @@ public class MessageReceiveHandler {
         //if trying to set to non-existent tunnel set to -1
         currentTunnel = -1;
         LOGGER.info("[TextTunnels] trying to show non existent tunnel \"{}\"", newTunnel);
-    }
-
-    public static void addMessage(Text message) {
-        String plainText = Formatting.strip(message.getString());
-        for (int index : tunnels.keySet()) {
-            Pattern pattern = Pattern.compile("^" + receivePrefixs.get(index)); //todo have this precompiled and makesure impropper regex is hanndelded
-            Matcher match = pattern.matcher(plainText);
-            if (match.find()) {
-                tunnels.get(index).add(CLIENT.inGameHud.getTicks());
-                //send match data to message sender for if it needs it to send message
-                Text_tunnels.updateLastMatch(index,match); //todo implement this
-
-            }
-        }
-        //if tunnel can not be found do not add it to tunnel
-
-
     }
 
     public static boolean shouldShow(int addedTime) {
