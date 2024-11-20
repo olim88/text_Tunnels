@@ -75,9 +75,9 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
 
         @Override
         public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            context.drawCenteredTextWithShadow(client.textRenderer, Text.literal("Tunnel Name"), width / 2 - 125, y + 5, 0xFFFFFFFF);
-            context.drawCenteredTextWithShadow(client.textRenderer, Text.literal("Tunnel Enabled"), width / 2, y + 5, 0xFFFFFFFF);
-            context.drawCenteredTextWithShadow(client.textRenderer, Text.literal("Modify"), width / 2 + 100, y + 5, 0xFFFFFFFF);
+            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.newTunnel"), width / 2 - 125, y + 5, 0xFFFFFFFF);
+            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.tunnelEnabled"), width / 2, y + 5, 0xFFFFFFFF);
+            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("ext_tunnels.config.tunnelConfig.configList.modify"), width / 2 + 100, y + 5, 0xFFFFFFFF);
         }
     }
     private class TunnelEntry extends AbstractEntry {
@@ -105,7 +105,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
                     .position(width / 2 - 25, 5)
                     .build();
 
-            openConfigButton = ButtonWidget.builder(Text.literal("Edit"), a -> {
+            openConfigButton = ButtonWidget.builder(Text.translatable("text_tunnels.config.tunnelConfig.configList.edit"), a -> {
                         client.setScreen(new TunnelConfigScreen(screen, tunnel));
                     })
                     .size(50, 20)
@@ -115,7 +115,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
 
             deleteButton = ButtonWidget.builder(Text.translatable("selectServer.delete"), a -> {
                         oldScrollAmount = getScrollAmount();
-                        client.setScreen(new ConfirmScreen(this::deleteEntry, Text.literal("Are you sure you want to delete this tunnel?"), Text.literal("Tunnel "+tunnel.name + "will be lost forever! (A long time!)"), Text.translatable("selectServer.deleteButton"), ScreenTexts.CANCEL));
+                        client.setScreen(new ConfirmScreen(this::deleteEntry, Text.translatable("text_tunnels.config.tunnelConfig.configList.deleteQuestion"), Text.translatable("text_tunnels.config.tunnelConfig.configList.lost",tunnel.name), Text.translatable("selectServer.deleteButton"), ScreenTexts.CANCEL));
                     })
                     .size(50, 20)
                     .position(width / 2 + 105, 5)
@@ -126,9 +126,9 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
 
         private Text enabledButtonText() {
             if (tunnel.enabled) {
-                return Text.literal("True").withColor(Color.GREEN.getRGB());
+                return Text.translatable("text_tunnels.config.tunnelConfig.configList.true").withColor(Color.GREEN.getRGB());
             } else {
-                return Text.literal("False").withColor(Color.RED.getRGB());
+                return Text.translatable("text_tunnels.config.tunnelConfig.configList.false").withColor(Color.RED.getRGB());
             }
         }
         private void toggleEnabled() {

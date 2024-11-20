@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "text_tunnels",
-  "version": "1.0.0",
+  "version": "${version}",
   "name": "Text Tunnels",
   "description": "",
   "authors": [],
   "contact": {},
   "license": "All-Rights-Reserved",
-  "icon": "assets/icon.png",
+  "icon": "assets/text_tunnels/icon.png",
 
   "environment": "client",
   "entrypoints": {

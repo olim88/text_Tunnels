@@ -12,17 +12,12 @@ public class mainCategory {
 
     public static ConfigCategory create (TextTunnelsConfig defaults, TextTunnelsConfig config) {
         return ConfigCategory.createBuilder()
-                .name(Text.literal("Main settings")) //todo add tooltips
-                .group(OptionGroup.createBuilder()
-                        .option(Option.<Boolean>createBuilder()
-                                .name(Text.literal("Enable Text Tunnels"))
-                                .description(OptionDescription.of(Text.literal("Toggle all the feature of this mod on and off")))
-                                .binding(defaults.mainConfig.enabled, () -> config.mainConfig.enabled, newVal -> config.mainConfig.enabled = newVal)
-                                .controller(TickBoxControllerBuilder::create)
-                                .build())
-                        .name(Text.literal("Name of the group"))
-                        .description(OptionDescription.of(Text.literal("This text will appear when you hover over the name or focus on the collapse button with Tab.")))
-
+                .name(Text.translatable("text_tunnels.config.main.name")) //todo add tooltips
+                .option(Option.<Boolean>createBuilder()
+                        .name(Text.translatable("text_tunnels.config.main.enabled"))
+                        .description(OptionDescription.of(Text.translatable("text_tunnels.config.main.enabled.@Tooltip")))
+                        .binding(defaults.mainConfig.enabled, () -> config.mainConfig.enabled, newVal -> config.mainConfig.enabled = newVal)
+                        .controller(TickBoxControllerBuilder::create)
                         .build())
                 .build();
     }

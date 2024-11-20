@@ -46,7 +46,7 @@ public class ConfigManager {
     public static Screen getConfigScreen(Screen parentScreen) {
         ManageServerConfigs.updateSeverList();
         return YetAnotherConfigLib.create(HANDLER, (defaults, config, builder) -> {
-            builder.title(Text.literal("Text Tunnels Settings"))
+            builder.title(Text.translatable("text_tunnels.config.name"))
                     .category(mainCategory.create(defaults, config))
                     .categories(serversCategory.create(defaults, config))
                     .save(ConfigManager::save)

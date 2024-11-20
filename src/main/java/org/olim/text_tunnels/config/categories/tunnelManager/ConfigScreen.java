@@ -17,7 +17,7 @@ public class ConfigScreen extends Screen {
     private final ServersConfig config;
 
     public ConfigScreen(Screen parent, ServersConfig serverConfig) {
-        super(Text.literal("Tunnels config for: \""+serverConfig.name+"\""));
+        super(Text.translatable("text_tunnels.config.tunnelConfig.config.for",serverConfig.name));
         this.parent = parent;
         config = serverConfig;
 
@@ -32,7 +32,7 @@ public class ConfigScreen extends Screen {
         GridWidget gridWidget = new GridWidget();
         gridWidget.getMainPositioner().marginX(5).marginY(2);
         GridWidget.Adder adder = gridWidget.createAdder(3);
-        ButtonWidget buttonNew = ButtonWidget.builder(Text.literal("New Tunnel"), button -> TunnelsListWidget.addRuleAfterSelected()).build();
+        ButtonWidget buttonNew = ButtonWidget.builder(Text.translatable("text_tunnels.config.tunnelConfig.config.newTunnel"), button -> TunnelsListWidget.addRuleAfterSelected()).build();
         adder.add(buttonNew);
         ButtonWidget buttonDone = ButtonWidget.builder(ScreenTexts.DONE, button -> {
             TunnelsListWidget.saveRules();

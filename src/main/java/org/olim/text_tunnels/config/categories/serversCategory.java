@@ -22,19 +22,19 @@ public class serversCategory {
         List<ConfigCategory> categories = new ArrayList<>(allServers.size());
         for (ServersConfig serverConfig : allServers) {
             ConfigCategory cat = ConfigCategory.createBuilder()
-                    .option(LabelOption.create(Text.literal("Server IP: "+serverConfig.ip)))
+                    .option(LabelOption.create(Text.translatable("text_tunnels.config.serverConfig.ip",serverConfig.ip)))
                     .name(Text.literal(serverConfig.name))
-                    .tooltip(Text.literal("config for " + serverConfig.name))
+                    .tooltip(Text.translatable("text_tunnels.config.serverConfig.configFor", serverConfig.name))
                     .option(Option.<Boolean>createBuilder()
-                            .name(Text.literal("Enable"))
-                            .description(OptionDescription.of(Text.literal("Toggle Text Tunnels for this server")))
+                            .name(Text.translatable("text_tunnels.config.serverConfig.enabled"))
+                            .description(OptionDescription.of(Text.translatable("text_tunnels.config.serverConfig.enabled.@Tooltip")))
                             .binding(true, () -> serverConfig.enabled, newVal -> serverConfig.enabled = newVal)
                             .controller(TickBoxControllerBuilder::create)
                             .build())
 
                     .option(ButtonOption.createBuilder()
-                            .name(Text.literal("Tunnels Config"))
-                            .text(Text.literal("Open"))
+                            .name(Text.translatable("text_tunnels.config.serverConfig.tunnelConfig"))
+                            .text(Text.translatable("text_tunnels.config.serverConfig.open"))
                             .action((screen, opt) -> MinecraftClient.getInstance().setScreen(new ConfigScreen(screen, serverConfig)))
                             .build())
                     .build();

@@ -27,7 +27,7 @@ public class TunnelConfigScreen extends Screen {
     private final TunnelConfig config;
 
     protected TunnelConfigScreen(Screen parent, TunnelConfig config) {
-        super(Text.literal("Tunnel Config"));
+        super(Text.translatable("text_tunnels.config.tunnelConfig.name"));
 
         this.parent = parent;
         this.config = config;
@@ -68,7 +68,7 @@ public class TunnelConfigScreen extends Screen {
 
 
         //finish
-        ButtonWidget finishButton = ButtonWidget.builder(Text.literal("Finish"), button -> close())
+        ButtonWidget finishButton = ButtonWidget.builder(Text.translatable("text_tunnels.config.tunnelConfig.finish"), button -> close())
                 .width(usableWidth)
                 .position(PADDING, this.height - PADDING - 20)
                 .build();
@@ -81,9 +81,9 @@ public class TunnelConfigScreen extends Screen {
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 16, 0xFFFFFFFF);
 
         //draw labels
-        context.drawTextWithShadow(this.textRenderer, "Tunnel Name:", PADDING, nameLabelY, 0xFFFFFFFF);
-        context.drawTextWithShadow(this.textRenderer, "Tunnel Receive Prefix:", PADDING, reciveLabelY, 0xFFFFFFFF);
-        context.drawTextWithShadow(this.textRenderer, "Tunnel Send Prefix:", PADDING, sendLabelY, 0xFFFFFFFF);
+        context.drawTextWithShadow(this.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.label.name"), PADDING, nameLabelY, 0xFFFFFFFF);
+        context.drawTextWithShadow(this.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.label.receive"), PADDING, reciveLabelY, 0xFFFFFFFF);
+        context.drawTextWithShadow(this.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.label.send"), PADDING, sendLabelY, 0xFFFFFFFF);
     }
 
     @Override

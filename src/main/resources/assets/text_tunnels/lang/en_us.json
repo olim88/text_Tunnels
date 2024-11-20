@@ -1,0 +1,32 @@
+{
+  "text_tunnels.config.name": "Text Tunnels Settings",
+
+  "text_tunnels.config.main.name": "Main settings",
+  "text_tunnels.config.main.enabled": "Enable Text Tunnels",
+  "text_tunnels.config.main.enabled.@Tooltip": "Toggle all the feature of this mod on and off",
+  "text_tunnels.config.main.description": "All non server dependent settings",
+
+
+  "text_tunnels.config.serverConfig.ip": "Server IP: %s",
+  "text_tunnels.config.serverConfig.configFor": "config for '%s'",
+  "text_tunnels.config.serverConfig.enabled": "Enabled",
+  "text_tunnels.config.serverConfig.enabled.@Tooltip": "Toggle Text Tunnels for this server",
+  "text_tunnels.config.serverConfig.tunnelConfig": "Tunnels Config",
+  "text_tunnels.config.serverConfig.open": "Open",
+
+  "text_tunnels.config.tunnelConfig.name": "Tunnel Config",
+  "text_tunnels.config.tunnelConfig.finish": "Finish",
+  "text_tunnels.config.tunnelConfig.label.name": "Tunnel Name:",
+  "text_tunnels.config.tunnelConfig.label.receive": "Tunnel Receive Prefix:",
+  "text_tunnels.config.tunnelConfig.label.send": "Tunnel Send Prefix:",
+  "text_tunnels.config.tunnelConfig.config.for": "Tunnels config for: '%s'",
+  "text_tunnels.config.tunnelConfig.config.newTunnel": "New Tunnel",
+  "text_tunnels.config.tunnelConfig.configList.newTunnel": "Tunnel Name",
+  "text_tunnels.config.tunnelConfig.configList.tunnelEnabled": "Tunnel Enabled",
+  "ext_tunnels.config.tunnelConfig.configList.modify": "Modify",
+  "text_tunnels.config.tunnelConfig.configList.edit": "Edit",
+  "text_tunnels.config.tunnelConfig.configList.deleteQuestion": "Are you sure you want to delete this tunnel?",
+  "text_tunnels.config.tunnelConfig.configList.lost": "Tunnel '%s' will be lost forever! (A long time!)",
+  "text_tunnels.config.tunnelConfig.configList.true": "True",
+  "text_tunnels.config.tunnelConfig.configList.false": "False"
+}
