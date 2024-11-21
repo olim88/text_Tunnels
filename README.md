@@ -5,7 +5,7 @@ letting you seperate chats into tunnels on servers such as Hypixel
 
 --- 
 # Feature
-- YACL config to have seperate tunnels for each server.
+- YACL config to have seperate tunnels for each server
 - auto server detetection and default configuration for popular servers
 - custom group regex for each tunnel
 - group matching pattern to have messages sent in a tunnel be dynamicaly changed depending on what was recived in the tunnel
