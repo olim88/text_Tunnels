@@ -3,10 +3,14 @@
   "id": "text_tunnels",
   "version": "${version}",
   "name": "Text Tunnels",
-  "description": "",
-  "authors": [],
-  "contact": {},
-  "license": "All-Rights-Reserved",
+  "description": "Separate Chat Channels",
+  "contact": {
+    "issues": "https://github.com/olim88/text_Tunnels/issues",
+    "sources": "https://github.com/olim88/text_Tunnels"
+  },
+  "authors": ["olim88"],
+
+  "license": "LGPL-3.0-or-later",
   "icon": "assets/text_tunnels/icon.png",
 
   "environment": "client",
