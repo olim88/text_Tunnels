@@ -19,21 +19,9 @@ public class MessageSendHandler {
     private static int currentIndex;
 
 
-    public static boolean load(List<String> channelSendPrefix) {
-        //make sure regex is correct
-        try {
-            channelSendPrefix.forEach(Pattern::compile);
-        }catch (PatternSyntaxException e) {
-            LOGGER.error("[TextTunnels] invalid send prefix.",e);
-            return false;
-        }
-
-
+    public static void load(List<String> channelSendPrefix) {
         sendPrefixes = channelSendPrefix;
         currentIndex = -1;
-
-
-        return true;
     }
 
     public static void clear() {

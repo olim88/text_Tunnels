@@ -28,5 +28,9 @@
   "text_tunnels.config.tunnelConfig.configList.deleteQuestion": "Are you sure you want to delete this tunnel?",
   "text_tunnels.config.tunnelConfig.configList.lost": "Tunnel '%s' will be lost forever! (A long time!)",
   "text_tunnels.config.tunnelConfig.configList.true": "True",
-  "text_tunnels.config.tunnelConfig.configList.false": "False"
+  "text_tunnels.config.tunnelConfig.configList.false": "False",
+    "text_tunnels.config.tunnelConfig.recivePrefix.@Tooltip": "Input text to filter received message (this is a regex pattern which parts can be used in the send prefix)",
+  "text_tunnels.config.tunnelConfig.sendPrefix.@Tooltip": "Input text to add to messages sent in this tunnel. (use \"$number\" to reference a group in the receive prefix)",
+  "text_tunnels.config.tunnelConfig.finish.@Tooltip.valid": "Save Tunnel",
+  "text_tunnels.config.tunnelConfig.finish.@Tooltip.invalid": "Invalid Recive Prefix. Fix regex to finish"
 }
