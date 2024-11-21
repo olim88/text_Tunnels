@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class MessageSendHandler {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -18,9 +19,21 @@ public class MessageSendHandler {
     private static int currentIndex;
 
 
-    public static void load(List<String> channelSendPrefix) {
+    public static boolean load(List<String> channelSendPrefix) {
+        //make sure regex is correct
+        try {
+            channelSendPrefix.forEach(Pattern::compile);
+        }catch (PatternSyntaxException e) {
+            LOGGER.error("[TextTunnels] invalid send prefix.",e);
+            return false;
+        }
+
+
         sendPrefixes = channelSendPrefix;
         currentIndex = -1;
+
+
+        return true;
     }
 
     public static void clear() {

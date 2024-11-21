@@ -13,13 +13,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class MessageReceiveHandler {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final Map<Integer, List<Integer>> tunnels = new HashMap<>();
-    private static List<String> receivePrefixs;
+    private static List<Pattern> receivePrefixs;
     private static int currentTunnel;
 
     public static void init() {
@@ -27,19 +28,25 @@ public class MessageReceiveHandler {
     }
 
 
-    public static void load(List<String> channelReceivePrefix) {
-        receivePrefixs = channelReceivePrefix;
+    public static boolean load(List<String> channelReceivePrefix) {
+        try {
+            receivePrefixs = channelReceivePrefix.stream().map(receivePrefix -> Pattern.compile("^"+receivePrefix)).toList();
+        } catch (PatternSyntaxException e) {
+            LOGGER.error("[TextTunnels] invalid receive prefix.",e);
+            return false;
+        }
         tunnels.clear();
         for (int i = 0; i < channelReceivePrefix.size(); i++) {
             tunnels.put(i, new ArrayList<>());
         }
         currentTunnel = -1;
+        return true;
     }
 
     private static boolean addMessage(Text message, boolean b) {
         String plainText = Formatting.strip(message.getString());
         for (int index : tunnels.keySet()) {
-            Pattern pattern = Pattern.compile("^" + receivePrefixs.get(index)); //todo have this precompiled and makesure impropper regex is hanndelded
+            Pattern pattern =receivePrefixs.get(index); //todo makesure impropper regex is hanndelded
             Matcher match = pattern.matcher(plainText);
             if (match.find()) {
                 tunnels.get(index).add(CLIENT.inGameHud.getTicks());

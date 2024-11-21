@@ -85,8 +85,12 @@ public class Text_tunnels implements ClientModInitializer {
                 //get this list off channel names and update
 
                 ButtonsHandler.load(names);
-                MessageReceiveHandler.load(receivePrefixes);
-                MessageSendHandler.load(sendPrefixes);
+                if (!MessageReceiveHandler.load(receivePrefixes) && MessageSendHandler.load(sendPrefixes)) {
+                    //there loading has been unsuccessful clear everything until the error is fixed
+                    LOGGER.error("[TextTunnels] unloading all tunnels until error fixed"); //todo output to chat
+                    clear();
+                }
+
                 return;
             }
         }

@@ -168,7 +168,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
         }
 
         @Override
-        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) { //todo get strings form en_us.json
+        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             //widgets
             enabledButton.setY(y);
             enabledButton.render(context, mouseX, mouseY, tickDelta);
