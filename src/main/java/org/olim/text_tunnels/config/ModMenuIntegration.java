@@ -1,4 +1,5 @@
 package org.olim.text_tunnels.config;
+
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 

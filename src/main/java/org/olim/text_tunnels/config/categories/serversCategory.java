@@ -1,13 +1,10 @@
 package org.olim.text_tunnels.config.categories;
 
 import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.olim.text_tunnels.config.categories.tunnelManager.ConfigScreen;
-import org.olim.text_tunnels.config.ConfigManager;
 import org.olim.text_tunnels.config.configs.ServersConfig;
 import org.olim.text_tunnels.config.configs.TextTunnelsConfig;
 
@@ -22,7 +19,7 @@ public class serversCategory {
         List<ConfigCategory> categories = new ArrayList<>(allServers.size());
         for (ServersConfig serverConfig : allServers) {
             ConfigCategory cat = ConfigCategory.createBuilder()
-                    .option(LabelOption.create(Text.translatable("text_tunnels.config.serverConfig.ip",serverConfig.ip)))
+                    .option(LabelOption.create(Text.translatable("text_tunnels.config.serverConfig.ip", serverConfig.ip)))
                     .name(Text.literal(serverConfig.name))
                     .tooltip(Text.translatable("text_tunnels.config.serverConfig.configFor", serverConfig.name))
                     .option(Option.<Boolean>createBuilder()

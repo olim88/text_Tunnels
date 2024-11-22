@@ -42,7 +42,6 @@ public class ConfigManager {
     }
 
 
-
     public static Screen getConfigScreen(Screen parentScreen) {
         ManageServerConfigs.updateSeverList();
         return YetAnotherConfigLib.create(HANDLER, (defaults, config, builder) -> {
@@ -53,7 +52,6 @@ public class ConfigManager {
                     .build();
             return builder;
 
-            
 
         }).generateScreen(parentScreen);
 

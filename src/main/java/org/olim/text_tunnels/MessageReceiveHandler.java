@@ -32,7 +32,7 @@ public class MessageReceiveHandler {
         try {
             receivePrefixs = channelReceivePrefix.stream().map(receivePrefix -> Pattern.compile("^"+receivePrefix)).toList();
         } catch (PatternSyntaxException e) {
-            LOGGER.error("[TextTunnels] invalid receive prefix.",e);
+            LOGGER.error("[TextTunnels] invalid receive prefix.", e);
             return false;
         }
         tunnels.clear();

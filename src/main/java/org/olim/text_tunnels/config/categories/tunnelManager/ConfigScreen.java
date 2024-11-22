@@ -17,7 +17,7 @@ public class ConfigScreen extends Screen {
     private final ServersConfig config;
 
     public ConfigScreen(Screen parent, ServersConfig serverConfig) {
-        super(Text.translatable("text_tunnels.config.tunnelConfig.config.for",serverConfig.name));
+        super(Text.translatable("text_tunnels.config.tunnelConfig.config.for", serverConfig.name));
         this.parent = parent;
         config = serverConfig;
 

@@ -28,7 +28,6 @@ public class TunnelConfigScreen extends Screen {
     private static int sendLabelY;
 
 
-
     private final Screen parent;
     private final TunnelConfig config;
 
@@ -82,7 +81,6 @@ public class TunnelConfigScreen extends Screen {
         addDrawableChild(sendPrefixInput);
 
 
-
         addDrawableChild(finishButton);
     }
 
@@ -114,17 +112,18 @@ public class TunnelConfigScreen extends Screen {
 
     /**
      * Checks to make sure a string is valid regex updates tooltip accordingly
+     *
      * @param string string to check
      */
     private static void isReceivePrefixValid(String string) {
         try {
             Pattern.compile(string);
-            //regex is valid set tooltip green
+            //regex is valid. set tooltip green and enable finish button
             recivePrefixInput.setTooltip(Tooltip.of(Text.translatable("text_tunnels.config.tunnelConfig.recivePrefix.@Tooltip").formatted(Formatting.GREEN)));
             finishButton.setTooltip(Tooltip.of(Text.translatable("text_tunnels.config.tunnelConfig.finish.@Tooltip.valid")));
             finishButton.active = true;
-        } catch (PatternSyntaxException e){
-            //regex is invalid
+        } catch (PatternSyntaxException e) {
+            //regex is invalid. set tooltip red and disable finish button
             recivePrefixInput.setTooltip(Tooltip.of(Text.translatable("text_tunnels.config.tunnelConfig.recivePrefix.@Tooltip").formatted(Formatting.RED)));
             finishButton.setTooltip(Tooltip.of(Text.translatable("text_tunnels.config.tunnelConfig.finish.@Tooltip.invalid").formatted(Formatting.RED)));
             finishButton.active = false;

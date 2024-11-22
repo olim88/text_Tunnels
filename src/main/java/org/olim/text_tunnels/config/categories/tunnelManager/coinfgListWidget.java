@@ -37,7 +37,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
     protected void addRuleAfterSelected() {
         int newIndex = Math.max(children().indexOf(getSelectedOrNull()), 0);
 
-        allChannels.add(newIndex,new TunnelConfig());
+        allChannels.add(newIndex, new TunnelConfig());
         children().add(newIndex + 1, new TunnelEntry(allChannels.get(newIndex)));
     }
 
@@ -80,6 +80,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
             context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("ext_tunnels.config.tunnelConfig.configList.modify"), width / 2 + 100, y + 5, 0xFFFFFFFF);
         }
     }
+
     private class TunnelEntry extends AbstractEntry {
         //data
         private final TunnelConfig tunnel;
@@ -97,7 +98,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
         private double oldScrollAmount = 0;
 
 
-        public TunnelEntry( TunnelConfig tunnel) {
+        public TunnelEntry(TunnelConfig tunnel) {
             this.tunnel = tunnel;
 
             enabledButton = ButtonWidget.builder(enabledButtonText(), a -> toggleEnabled())
@@ -115,7 +116,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
 
             deleteButton = ButtonWidget.builder(Text.translatable("selectServer.delete"), a -> {
                         oldScrollAmount = getScrollAmount();
-                        client.setScreen(new ConfirmScreen(this::deleteEntry, Text.translatable("text_tunnels.config.tunnelConfig.configList.deleteQuestion"), Text.translatable("text_tunnels.config.tunnelConfig.configList.lost",tunnel.name), Text.translatable("selectServer.deleteButton"), ScreenTexts.CANCEL));
+                        client.setScreen(new ConfirmScreen(this::deleteEntry, Text.translatable("text_tunnels.config.tunnelConfig.configList.deleteQuestion"), Text.translatable("text_tunnels.config.tunnelConfig.configList.lost", tunnel.name), Text.translatable("selectServer.deleteButton"), ScreenTexts.CANCEL));
                     })
                     .size(50, 20)
                     .position(width / 2 + 105, 5)
@@ -131,8 +132,9 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
                 return Text.translatable("text_tunnels.config.tunnelConfig.configList.false").withColor(Color.RED.getRGB());
             }
         }
+
         private void toggleEnabled() {
-            tunnel.enabled = ! tunnel.enabled;
+            tunnel.enabled = !tunnel.enabled;
             enabledButton.setMessage(enabledButtonText());
         }
 
