@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.text.Text;
 import org.olim.text_tunnels.config.ConfigManager;
 import org.olim.text_tunnels.config.configs.ServersConfig;
 import org.olim.text_tunnels.config.configs.TunnelConfig;
@@ -86,7 +87,7 @@ public class Text_tunnels implements ClientModInitializer {
 
                 if (!MessageReceiveHandler.load(receivePrefixes)) {
                     //there loading has been unsuccessful clear everything until the error is fixed
-                    LOGGER.error("[TextTunnels] unloading all tunnels until error fixed"); //todo output to chat
+                    LOGGER.error("[TextTunnels] unloading all tunnels until error fixed");
                     clear();
                 }
                 ButtonsHandler.load(names);

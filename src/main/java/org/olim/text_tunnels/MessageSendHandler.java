@@ -1,6 +1,9 @@
 package org.olim.text_tunnels;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -8,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 public class MessageSendHandler {
+    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Pattern GROUP_PATTERN = Pattern.compile("\\$\\d+");
 
@@ -25,8 +28,10 @@ public class MessageSendHandler {
     }
 
     public static void clear() {
-        sendPrefixes.clear();
-        lastIncomingMatch.clear();
+        if (sendPrefixes != null) {
+            sendPrefixes.clear();
+            lastIncomingMatch.clear();
+        }
     }
 
     public static void updateIndex(int newIndex) {
@@ -52,7 +57,10 @@ public class MessageSendHandler {
                     int index = Integer.parseInt(foundGroup.substring(1));
                     if (index > replacements.groupCount()) {
                         LOGGER.error("[TextTunnels] not enough groups in receive prefix to fill in send prefix");
-                        LOGGER.error("[TextTunnels] can not get group {} out of {} groups",index, replacements.groupCount());
+                        LOGGER.error("[TextTunnels] can not get group {} out of {} groups", index, replacements.groupCount());
+                        if (CLIENT.player != null) {
+                            CLIENT.player.sendMessage(Text.translatable("text_tunnels.MessageSendHandler.error", index, replacements.groupCount()).formatted(Formatting.RED), false);
+                        }
 
                     } else {
                         prefix = prefix.replace(foundGroup, replacements.group(index));
@@ -62,6 +70,9 @@ public class MessageSendHandler {
                 //if there is no data yet to go of just replace with empty string
                 else {
                     LOGGER.info("[TextTunnels] Can not replace group with out existing matched message");
+                    if (CLIENT.player != null) {
+                        CLIENT.player.sendMessage(Text.translatable("text_tunnels.MessageSendHandler.noExistingError").formatted(Formatting.YELLOW), false);
+                    }
                 }
                 prefix = prefix.replace(foundGroup, "");//todo tell the user about this
 

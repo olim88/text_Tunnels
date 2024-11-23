@@ -20,7 +20,7 @@ public class MessageReceiveHandler {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final Map<Integer, List<Integer>> tunnels = new HashMap<>();
-    private static List<Pattern> receivePrefixs;
+    private static List<Pattern> receivePrefixes;
     private static int currentTunnel;
 
     public static void init() {
@@ -30,9 +30,12 @@ public class MessageReceiveHandler {
 
     public static boolean load(List<String> channelReceivePrefix) {
         try {
-            receivePrefixs = channelReceivePrefix.stream().map(receivePrefix -> Pattern.compile("^"+receivePrefix)).toList();
+            receivePrefixes = channelReceivePrefix.stream().map(receivePrefix -> Pattern.compile("^" + receivePrefix)).toList();
         } catch (PatternSyntaxException e) {
-            LOGGER.error("[TextTunnels] invalid receive prefix.", e);
+            LOGGER.error("[TextTunnels] invalid receive prefix: {}", e.getMessage());
+            if (CLIENT.player != null) {
+                CLIENT.player.sendMessage(Text.translatable("text_tunnels.messageReceiveHandler.error",e.getPattern()).formatted(Formatting.RED),false);
+            }
             return false;
         }
         tunnels.clear();
@@ -45,13 +48,16 @@ public class MessageReceiveHandler {
 
     private static boolean addMessage(Text message, boolean b) {
         String plainText = Formatting.strip(message.getString());
+        boolean modMessage = plainText.startsWith("[TextTunnels]");
         for (int index : tunnels.keySet()) {
-            Pattern pattern =receivePrefixs.get(index); //todo makesure impropper regex is hanndelded
+            Pattern pattern = receivePrefixes.get(index);
             Matcher match = pattern.matcher(plainText);
-            if (match.find()) {
+            if (match.find() || modMessage) {
                 tunnels.get(index).add(CLIENT.inGameHud.getTicks());
                 //send match data to message sender for if it needs it to send message
-                Text_tunnels.updateLastMatch(index, match);
+                if (!modMessage) {
+                    Text_tunnels.updateLastMatch(index, match);
+                }
 
             }
         }

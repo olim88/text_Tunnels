@@ -111,7 +111,6 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
                     })
                     .size(50, 20)
                     .position(width / 2 + 45, 5)
-                    //.tooltip(Tooltip.of(Text.translatable("skyblocker.config.chat.chatRules.screen.editRule.@Tooltip")))todo
                     .build();
 
             deleteButton = ButtonWidget.builder(Text.translatable("selectServer.delete"), a -> {

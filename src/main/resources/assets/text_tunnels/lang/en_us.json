@@ -32,5 +32,8 @@
     "text_tunnels.config.tunnelConfig.recivePrefix.@Tooltip": "Input text to filter received message (this is a regex pattern which parts can be used in the send prefix)",
   "text_tunnels.config.tunnelConfig.sendPrefix.@Tooltip": "Input text to add to messages sent in this tunnel. (use \"$number\" to reference a group in the receive prefix)",
   "text_tunnels.config.tunnelConfig.finish.@Tooltip.valid": "Save Tunnel",
-  "text_tunnels.config.tunnelConfig.finish.@Tooltip.invalid": "Invalid Recive Prefix. Fix regex to finish"
+  "text_tunnels.config.tunnelConfig.finish.@Tooltip.invalid": "Invalid Recive Prefix. Fix regex to finish",
+  "text_tunnels.messageReceiveHandler.error": "[TextTunnels] Invalid regex for message: %s. Can't load tunnels until fixed",
+  "text_tunnels.MessageSendHandler.error": "[TextTunnels] Can't get group %s out of %s groups (need to fix your config)",
+  "text_tunnels.MessageSendHandler.noExistingError": "[TextTunnels] Can not replace group with out existing matched message"
 }
