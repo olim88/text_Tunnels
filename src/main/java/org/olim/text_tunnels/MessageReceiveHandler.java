@@ -1,12 +1,13 @@
 package org.olim.text_tunnels;
 
 import com.mojang.logging.LogUtils;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
-
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,8 +19,7 @@ import java.util.regex.PatternSyntaxException;
 public class MessageReceiveHandler {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     private static final Logger LOGGER = LogUtils.getLogger();
-
-    private static final Map<Integer, List<Integer>> tunnels = new HashMap<>();
+    private static final Int2ObjectMap<List<Integer>> tunnels = new Int2ObjectArrayMap<>();
     private static List<Pattern> receivePrefixes;
     private static int currentTunnel;
 

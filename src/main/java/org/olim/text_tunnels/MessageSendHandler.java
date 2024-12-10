@@ -1,6 +1,8 @@
 package org.olim.text_tunnels;
 
 import com.mojang.logging.LogUtils;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -16,8 +18,7 @@ public class MessageSendHandler {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Pattern GROUP_PATTERN = Pattern.compile("\\$\\d+");
-
-    private static final Map<Integer, Matcher> lastIncomingMatch = new HashMap<>();
+    private static final Int2ObjectMap<Matcher> lastIncomingMatch = new Int2ObjectArrayMap<>();
     private static List<String> sendPrefixes;
     private static int currentIndex;
 
