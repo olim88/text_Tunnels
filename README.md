@@ -12,4 +12,4 @@ letting you seperate chats into tunnels on servers such as Hypixel
 
 
 # Modrinth 
-[![modrinth statistic](https://img.shields.io/modrinth/dt/text-tunnels?color=00AF5C&label=Download&labelColor=cecece00AF5C&logo=modrinth)](https://modrinth.com/mod/skyblocker-liap)
+[![modrinth statistic](https://img.shields.io/modrinth/dt/text-tunnels?color=00AF5C&label=Download&labelColor=cecece00AF5C&logo=modrinth)](https://modrinth.com/mod/text-tunnels)
