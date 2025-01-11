@@ -94,9 +94,6 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
 
         //text location
         private final int nameX = width / 2 - 125;
-        //saved data
-        private double oldScrollAmount = 0;
-
 
         public TunnelEntry(TunnelConfig tunnel) {
             this.tunnel = tunnel;
@@ -114,7 +111,6 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
                     .build();
 
             deleteButton = ButtonWidget.builder(Text.translatable("selectServer.delete"), a -> {
-                        oldScrollAmount = getScrollAmount();
                         client.setScreen(new ConfirmScreen(this::deleteEntry, Text.translatable("text_tunnels.config.tunnelConfig.configList.deleteQuestion"), Text.translatable("text_tunnels.config.tunnelConfig.configList.lost", tunnel.name), Text.translatable("selectServer.deleteButton"), ScreenTexts.CANCEL));
                     })
                     .size(50, 20)
@@ -145,7 +141,6 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
             }
 
             client.setScreen(screen);
-            setScrollAmount(oldScrollAmount);
         }
 
         @Override

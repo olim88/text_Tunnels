@@ -13,12 +13,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Arrays;
-
 @Mixin(ClientPlayNetworkHandler.class)
 public abstract class ClientPlayerNetworkHandlerMixin {
 
-    @Shadow public abstract ClientConnection getConnection();
+    @Shadow
+    public abstract ClientConnection getConnection();
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void onInit(MinecraftClient client, ClientConnection clientConnection, ClientConnectionState clientConnectionState, CallbackInfo ci) {
