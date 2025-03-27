@@ -24,7 +24,7 @@ public class ConfigManager {
                     .setJson5(false)
                     .appendGsonBuilder(builder -> builder
                             .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
-                            .registerTypeHierarchyAdapter(Identifier.class, new Identifier.Serializer()))
+                            )
                     .build())
             .build();
 
