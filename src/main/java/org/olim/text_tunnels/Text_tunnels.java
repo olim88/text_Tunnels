@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.text.Text;
 import org.olim.text_tunnels.config.ConfigManager;
 import org.olim.text_tunnels.config.configs.ServersConfig;
 import org.olim.text_tunnels.config.configs.TunnelConfig;
@@ -22,6 +21,8 @@ import java.util.regex.Matcher;
 public class Text_tunnels implements ClientModInitializer {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     private static final Logger LOGGER = LogUtils.getLogger();
+
+    private static String currentAddress;
 
     @Override
     public void onInitializeClient() {
@@ -54,17 +55,26 @@ public class Text_tunnels implements ClientModInitializer {
 
 
     public static void loadForServer(String serverAddress) {
+       currentAddress = serverAddress;
+       refreshServerConfig();
+    }
+    public static void refreshServerConfig(){
         if (!ConfigManager.get().mainConfig.enabled) {
             clear();
             return;
         }
-        if (serverAddress.contains("/")) {
-            serverAddress = Arrays.stream(serverAddress.split("/")).findFirst().get();
+        if (currentAddress.contains("/")) {
+            currentAddress = Arrays.stream(currentAddress.split("/")).findFirst().get();
         }
         //if the server has a config load that config
         for (ServersConfig server : ConfigManager.get().serversConfigs) {
-            if (server.ip.equals(serverAddress) && server.enabled) {
-                LOGGER.info("[TextTunnels] loaded config for \"{}\"", serverAddress);
+            if (server.ip.equals(currentAddress)) {
+                //if the server is not enabled clea
+                if (!server.enabled) {
+                    clear();
+                    continue;
+                }
+                LOGGER.info("[TextTunnels] loaded config for \"{}\"", currentAddress);
                 //clear everything if there are no channels
                 if (server.tunnelConfigs.isEmpty()) {
                     LOGGER.info("[TextTunnels] no tunnels available to load");
@@ -96,7 +106,7 @@ public class Text_tunnels implements ClientModInitializer {
                 return;
             }
         }
-        LOGGER.info("[TextTunnels] could not find config for \"{}\"", serverAddress);
+        LOGGER.info("[TextTunnels] could not find config for \"{}\"", currentAddress);
     }
 
     public static void clear() {
@@ -107,16 +117,10 @@ public class Text_tunnels implements ClientModInitializer {
 
 
     public static void configUpdated() {
-
         //when the config is updated check if the player is on a sever and then reload
         ClientPlayNetworkHandler networkHandler = CLIENT.getNetworkHandler();
         if (networkHandler != null) {
-            SocketAddress address = networkHandler.getConnection().getAddress();
-            if (address != null) {
-                loadForServer(address.toString());
-            }
+            refreshServerConfig();
         }
     }
-
-
 }
