@@ -23,6 +23,21 @@ public class ManageServerConfigs {
                     new TunnelConfig("Guild", "Guild >", "/gc "),
                     new TunnelConfig("Party", "Party >", "/pc "),
                     new TunnelConfig("Private", "(From|To)( \\[(VIP|MVP)\\+?\\])? (.[^\\s]+):", "/msg $4 ")
+            )),
+            Map.entry("hypixel.net", List.of(
+                    new TunnelConfig("Guild", "Guild >", "/gc "),
+                    new TunnelConfig("Party", "Party >", "/pc "),
+                    new TunnelConfig("Private", "(From|To)( \\[(VIP|MVP)\\+?\\])? (.[^\\s]+):", "/msg $4 ")
+            )),
+            Map.entry("stuck.hypixel.net", List.of(
+                    new TunnelConfig("Guild", "Guild >", "/gc "),
+                    new TunnelConfig("Party", "Party >", "/pc "),
+                    new TunnelConfig("Private", "(From|To)( \\[(VIP|MVP)\\+?\\])? (.[^\\s]+):", "/msg $4 ")
+            )),
+            Map.entry("alpha.hypixel.net", List.of(
+                    new TunnelConfig("Guild", "Guild >", "/gc "),
+                    new TunnelConfig("Party", "Party >", "/pc "),
+                    new TunnelConfig("Private", "(From|To)( \\[(VIP|MVP)\\+?\\])? (.[^\\s]+):", "/msg $4 ")
             ))
     );
 
