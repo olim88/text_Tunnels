@@ -8,13 +8,24 @@ public class MainConfig {
     @SerialEntry
     public boolean enabled = true;
 
+    @SerialEntry
+    public ButtonStyle buttonStyle = new ButtonStyle();
 
+    public static class ButtonStyle {
+        @SerialEntry
+        public int spacing = 0;
 
+        @SerialEntry
+        public int heightOffset = 0;
 
-
+        @SerialEntry
+        public boolean fancyStyle = true;
+    }
 
 
 }
+
+
 
 
 

@@ -3,7 +3,11 @@ package org.olim.text_tunnels;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.math.MathHelper;
+import org.olim.text_tunnels.config.ConfigManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +44,13 @@ public class ButtonsHandler {
     public static void render(DrawContext context, int mouseX, int mouseY, float delta) {
         //render all the buttons
         for (ButtonWidget button : activeButtons) {
-            button.render(context, mouseX, mouseY, delta);
+            if (ConfigManager.get().mainConfig.buttonStyle.fancyStyle) {
+                customButtonRender(context, button);
+            } else {
+                button.render(context, mouseX, mouseY, delta);
+            }
         }
+
     }
 
 
@@ -51,12 +60,12 @@ public class ButtonsHandler {
         }
         int rowOffset = 0;
         for (ButtonWidget button : activeButtons) {
-            button.setPosition(x + rowOffset, y - height - 4);
+            button.setPosition(x + rowOffset, y - height - 2 - ConfigManager.get().mainConfig.buttonStyle.heightOffset); // take the height of the button the spacing between the bottom and the text input and the config space
             button.setHeight(height);
             //set the width to needed
-            int width = CLIENT.textRenderer.getWidth(button.getMessage()) + 5; //+4 to account for padding and +1 for a space
+            int width = CLIENT.textRenderer.getWidth(button.getMessage()) + 4; //+4 to account for padding in the button
             button.setWidth(width);
-            rowOffset += width;
+            rowOffset += width + ConfigManager.get().mainConfig.buttonStyle.spacing; // add with of button and space between them
         }
         if (!positionsSet) {
             //focus selected button (assume first is)
@@ -79,4 +88,24 @@ public class ButtonsHandler {
             button.mouseClicked(mouseX, mouseY, mouseButton);
         }
     }
+
+
+    public static void customButtonRender(DrawContext context, ButtonWidget button) {
+        //expand button height if its focused
+        if (button.isFocused()) {
+            button.setHeight(button.getHeight() + 4);
+            button.setY(button.getY() - 4);
+        }
+
+        context.fill(RenderLayer.getGui(), button.getX(), button.getY(), button.getX() + button.getWidth(), button.getY() + button.getHeight(), CLIENT.options.getTextBackgroundColor(Integer.MIN_VALUE));
+
+        int i = button.active ? 16777215 : 10526880;
+        button.drawMessage(context, CLIENT.textRenderer, i | MathHelper.ceil(255.0F) << 24);
+        // reset button height
+        if (button.isFocused()) {
+            button.setHeight(button.getHeight() - 4);
+            button.setY(button.getY() + 4);
+        }
+    }
+
 }

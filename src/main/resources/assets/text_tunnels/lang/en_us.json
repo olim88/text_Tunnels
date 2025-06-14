@@ -5,6 +5,12 @@
   "text_tunnels.config.main.enabled": "Enable Text Tunnels",
   "text_tunnels.config.main.enabled.@Tooltip": "Toggle all the feature of this mod on and off",
   "text_tunnels.config.main.description": "All non server dependent settings",
+  "text_tunnels.config.main.buttonStyle.spacing": "Horizontal Spacing",
+  "text_tunnels.config.main.buttonStyle.spacing.@Tooltip": "The space separating the tooltips",
+  "text_tunnels.config.main.buttonStyle.heightOffset": "Vertical Spacing",
+  "text_tunnels.config.main.buttonStyle.heightOffset.@Tooltip": "The space above the text input",
+  "text_tunnels.config.main.buttonStyle.fancyStyle": "Fancy Buttons",
+  "text_tunnels.config.main.buttonStyle.fancyStyle.@Tooltip": "Switch the buttons to be in keeping with the chat background",
 
 
   "text_tunnels.config.serverConfig.ip": "Server IP: %s",
