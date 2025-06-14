@@ -21,8 +21,6 @@ public class MainConfig {
         @SerialEntry
         public boolean fancyStyle = true;
     }
-
-
 }
 
 

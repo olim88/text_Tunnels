@@ -21,18 +21,18 @@ public class mainCategory {
                         .controller(TickBoxControllerBuilder::create)
                         .build())
                 .group(OptionGroup.createBuilder()
-                        .name(Text.translatable("text_tunnels.config.buttonStyle"))
+                        .name(Text.translatable("text_tunnels.config.main.buttonStyle"))
                         .collapsed(false)
                         .option(Option.<Integer>createBuilder()
-                                .name(Text.translatable("text_tunnels.config.buttonStyle.spacing"))
-                                .description(OptionDescription.of(Text.translatable("text_tunnels.config.buttonStyle.spacing.@Tooltip")))
+                                .name(Text.translatable("text_tunnels.config.main.buttonStyle.spacing"))
+                                .description(OptionDescription.of(Text.translatable("text_tunnels.config.main.buttonStyle.spacing.@Tooltip")))
                                 .binding(defaults.mainConfig.buttonStyle.spacing,
                                         () -> config.mainConfig.buttonStyle.spacing,
                                         newValue -> config.mainConfig.buttonStyle.spacing = newValue)
                                 .controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, 10).step(1))
                                 .build())
                         .option(Option.<Integer>createBuilder()
-                                .name(Text.translatable("text_tunnels.config.buttonStyle.heightOffset"))
+                                .name(Text.translatable("text_tunnels.config.main.buttonStyle.heightOffset"))
                                 .description(OptionDescription.of(Text.translatable("text_tunnels.config.buttonStyle.heightOffset.@Tooltip")))
                                 .binding(defaults.mainConfig.buttonStyle.heightOffset,
                                         () -> config.mainConfig.buttonStyle.heightOffset,
