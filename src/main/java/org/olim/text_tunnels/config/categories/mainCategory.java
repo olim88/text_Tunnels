@@ -4,9 +4,13 @@ import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.OptionGroup;
+import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
+import dev.isxander.yacl3.api.controller.EnumDropdownControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import net.minecraft.text.Text;
+import org.olim.text_tunnels.ButtonsHandler;
+import org.olim.text_tunnels.config.configs.MainConfig;
 import org.olim.text_tunnels.config.configs.TextTunnelsConfig;
 
 public class mainCategory {
@@ -22,7 +26,7 @@ public class mainCategory {
                         .build())
                 .group(OptionGroup.createBuilder()
                         .name(Text.translatable("text_tunnels.config.main.buttonStyle"))
-                        .collapsed(false)
+                        .collapsed(true)
                         .option(Option.<Integer>createBuilder()
                                 .name(Text.translatable("text_tunnels.config.main.buttonStyle.spacing"))
                                 .description(OptionDescription.of(Text.translatable("text_tunnels.config.main.buttonStyle.spacing.@Tooltip")))
@@ -44,6 +48,32 @@ public class mainCategory {
                                 .description(OptionDescription.of(Text.translatable("text_tunnels.config.main.buttonStyle.fancyStyle.@Tooltip")))
                                 .binding(defaults.mainConfig.buttonStyle.fancyStyle, () -> config.mainConfig.buttonStyle.fancyStyle, newVal -> config.mainConfig.buttonStyle.fancyStyle = newVal)
                                 .controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .build())
+                .group(OptionGroup.createBuilder()
+                        .name(Text.translatable("text_tunnels.config.main.unreadIndicators"))
+                        .collapsed(true)
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Text.translatable("text_tunnels.config.main.unreadIndicators.enabled"))
+                                .description(OptionDescription.of(Text.translatable("text_tunnels.config.main.unreadIndicators.enabled.@Tooltip")))
+                                .binding(defaults.mainConfig.unreadIndicators.enabled, () -> config.mainConfig.unreadIndicators.enabled, newVal -> config.mainConfig.unreadIndicators.enabled = newVal)
+                                .controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .option(Option.<Integer>createBuilder()
+                                .name(Text.translatable("text_tunnels.config.main.unreadIndicators.scale"))
+                                .description(OptionDescription.of(Text.translatable("text_tunnels.config.main.unreadIndicators.scale.@Tooltip")))
+                                .binding(defaults.mainConfig.unreadIndicators.scale,
+                                        () -> config.mainConfig.unreadIndicators.scale,
+                                        newValue -> config.mainConfig.unreadIndicators.scale = newValue)
+                                .controller(opt -> IntegerSliderControllerBuilder.create(opt).range(1, 3).step(1))
+                                .build())
+                        .option(Option.<MainConfig.IndicatorStyle>createBuilder()
+                                .name(Text.translatable("text_tunnels.config.main.unreadIndicators.style"))
+                                .description(OptionDescription.of(Text.translatable("text_tunnels.config.main.unreadIndicators.style.@Tooltip")))
+                                .binding(defaults.mainConfig.unreadIndicators.style,
+                                        () -> config.mainConfig.unreadIndicators.style,
+                                        newValue -> config.mainConfig.unreadIndicators.style = newValue)
+                                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(MainConfig.IndicatorStyle.class))
                                 .build())
                         .build())
                 .build();

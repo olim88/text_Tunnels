@@ -53,13 +53,14 @@ public class MessageReceiveHandler {
             Matcher match = pattern.matcher(plainText);
             if (match.find() || modMessage) {
                 tunnels.get(index).add(CLIENT.inGameHud.getTicks());
+                ButtonsHandler.addNotificationIndicator(index + 1);
                 //send match data to message sender for if it needs it to send message
                 if (!modMessage) {
                     Text_tunnels.updateLastMatch(index, match);
                 }
-
             }
         }
+        ButtonsHandler.addNotificationIndicator(0);
         //if tunnel can not be found do not add it to tunnel
         return true;
     }

@@ -5,9 +5,11 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import org.olim.text_tunnels.config.ConfigManager;
+import org.olim.text_tunnels.config.configs.MainConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ public class ButtonsHandler {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     private static final List<ButtonWidget> activeButtons = new ArrayList<>();
+    private static final List<Boolean> notificationIndicators = new ArrayList<>();
     private static boolean positionsSet = false;
 
     public static void load(List<String> buttonNames) {
@@ -28,6 +31,12 @@ public class ButtonsHandler {
         for (int i = 0; i < buttonNames.size(); i++) {
             int finalI = i;
             activeButtons.add(new ButtonWidget.Builder(Text.of(buttonNames.get(i)), button -> channelUpdate(button, finalI)).build());
+        }
+
+        //reset notification indicators
+        notificationIndicators.clear();
+        for (int i = 0; i <= buttonNames.size(); i++) {
+            notificationIndicators.add(false);
         }
     }
 
@@ -51,6 +60,26 @@ public class ButtonsHandler {
             }
         }
 
+        //draw missed messages bubble
+        if (!ConfigManager.get().mainConfig.unreadIndicators.enabled) return;
+        int scale = ConfigManager.get().mainConfig.unreadIndicators.scale;
+        int index = 0;
+        for (ButtonWidget button : activeButtons) {
+            if (notificationIndicators.get(index)) {
+                //disable when channel is detected
+                if (button.isFocused()) {
+                    notificationIndicators.set(index, false);
+                    continue;
+                }
+                MainConfig.IndicatorStyle style = ConfigManager.get().mainConfig.unreadIndicators.style;
+                context.drawTexture(RenderLayer::getGuiTexturedOverlay, style.getIdentifier(), button.getX() + button.getWidth() - (style.size/2) * scale, button.getY() - (4 * scale), 1f, 1f, style.size * scale, style.size * scale, style.size * scale, style.size * scale);
+            }
+            index++;
+        }
+    }
+
+    public static void addNotificationIndicator(int index) {
+        notificationIndicators.set(index, true);
     }
 
 
@@ -89,7 +118,6 @@ public class ButtonsHandler {
         }
     }
 
-
     public static void customButtonRender(DrawContext context, ButtonWidget button) {
         //expand button height if its focused
         if (button.isFocused()) {
@@ -107,5 +135,4 @@ public class ButtonsHandler {
             button.setY(button.getY() + 4);
         }
     }
-
 }

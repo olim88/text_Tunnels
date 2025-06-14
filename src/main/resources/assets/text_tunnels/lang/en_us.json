@@ -5,12 +5,26 @@
   "text_tunnels.config.main.enabled": "Enable Text Tunnels",
   "text_tunnels.config.main.enabled.@Tooltip": "Toggle all the feature of this mod on and off",
   "text_tunnels.config.main.description": "All non server dependent settings",
+  "text_tunnels.config.main.buttonStyle": "Button Style",
   "text_tunnels.config.main.buttonStyle.spacing": "Horizontal Spacing",
   "text_tunnels.config.main.buttonStyle.spacing.@Tooltip": "The space separating the tooltips",
   "text_tunnels.config.main.buttonStyle.heightOffset": "Vertical Spacing",
   "text_tunnels.config.main.buttonStyle.heightOffset.@Tooltip": "The space above the text input",
   "text_tunnels.config.main.buttonStyle.fancyStyle": "Fancy Buttons",
   "text_tunnels.config.main.buttonStyle.fancyStyle.@Tooltip": "Switch the buttons to be in keeping with the chat background",
+  "text_tunnels.config.main.unreadIndicators": "Unread Indicators",
+  "text_tunnels.config.main.unreadIndicators.enabled": "Enabled",
+  "text_tunnels.config.main.unreadIndicators.enabled.@Tooltip": "Show indicator when there is an unread message in chanel",
+  "text_tunnels.config.main.unreadIndicators.scale": "Scale",
+  "text_tunnels.config.main.unreadIndicators.scale.@Tooltip": "The Size the indicator should be",
+  "text_tunnels.config.main.unreadIndicators.style": "Indicator style",
+  "text_tunnels.config.main.unreadIndicators.style.@Tooltip": "The icon used for the indicator",
+  "text_tunnels.config.main.unreadIndicators.style.mode.FLAME": "Flame",
+  "text_tunnels.config.main.unreadIndicators.style.mode.GLINT": "Glint",
+  "text_tunnels.config.main.unreadIndicators.style.mode.CRIT": "Crit",
+  "text_tunnels.config.main.unreadIndicators.style.mode.SOUL": "Soul",
+
+
 
 
   "text_tunnels.config.serverConfig.ip": "Server IP: %s",
