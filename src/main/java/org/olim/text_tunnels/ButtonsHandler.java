@@ -1,6 +1,8 @@
 package org.olim.text_tunnels;
 
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.RenderLayer;
@@ -72,7 +74,7 @@ public class ButtonsHandler {
                     continue;
                 }
                 MainConfig.IndicatorStyle style = ConfigManager.get().mainConfig.unreadIndicators.style;
-                context.drawTexture(RenderLayer::getGuiTexturedOverlay, style.getIdentifier(), button.getX() + button.getWidth() - (style.size/2) * scale, button.getY() - (4 * scale), 1f, 1f, style.size * scale, style.size * scale, style.size * scale, style.size * scale);
+                context.drawTexture(RenderPipelines.GUI_TEXTURED, style.getIdentifier(), button.getX() + button.getWidth() - (style.size/2) * scale, button.getY() - (4 * scale), 1f, 1f, style.size * scale, style.size * scale, style.size * scale, style.size * scale);
             }
             index++;
         }
@@ -125,7 +127,7 @@ public class ButtonsHandler {
             button.setY(button.getY() - 4);
         }
 
-        context.fill(RenderLayer.getGui(), button.getX(), button.getY(), button.getX() + button.getWidth(), button.getY() + button.getHeight(), CLIENT.options.getTextBackgroundColor(Integer.MIN_VALUE));
+        context.fill(RenderPipelines.GUI, button.getX(), button.getY(), button.getX() + button.getWidth(), button.getY() + button.getHeight(), CLIENT.options.getTextBackgroundColor(Integer.MIN_VALUE));
 
         int i = button.active ? 16777215 : 10526880;
         button.drawMessage(context, CLIENT.textRenderer, i | MathHelper.ceil(255.0F) << 24);
