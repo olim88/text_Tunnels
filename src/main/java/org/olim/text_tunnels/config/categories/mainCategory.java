@@ -37,7 +37,7 @@ public class mainCategory {
                                 .build())
                         .option(Option.<Integer>createBuilder()
                                 .name(Text.translatable("text_tunnels.config.main.buttonStyle.heightOffset"))
-                                .description(OptionDescription.of(Text.translatable("text_tunnels.config.buttonStyle.heightOffset.@Tooltip")))
+                                .description(OptionDescription.of(Text.translatable("text_tunnels.config.main.buttonStyle.heightOffset.@Tooltip")))
                                 .binding(defaults.mainConfig.buttonStyle.heightOffset,
                                         () -> config.mainConfig.buttonStyle.heightOffset,
                                         newValue -> config.mainConfig.buttonStyle.heightOffset = newValue)

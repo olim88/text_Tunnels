@@ -26,7 +26,7 @@ public class ChatScreenMixin {
         ButtonsHandler.updatePositions(chatField.getX(), chatField.getY(), chatField.getHeight());
     }
 
-    @Inject(method = "render", at = @At("RETURN"))
+    @Inject(method = "render", at = @At("HEAD"))
     private void afterRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         ButtonsHandler.render(context, mouseX, mouseY, delta);
     }
