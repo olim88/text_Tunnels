@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(ChatHud.class)
@@ -53,6 +54,11 @@ public class ChatHudMixin {
         return filterVisible();
     }
 
+    @Redirect(method = "method_71990", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
+    private List<ChatHudLine.Visible> edit71990(ChatHud instance) {
+        return filterVisible();
+    }
+
     @Unique
     private List<ChatHudLine.Visible> filterVisible() {
         if (MessageReceiveHandler.isFilterInActive()) {
@@ -60,6 +66,4 @@ public class ChatHudMixin {
         }
         return visibleMessages.stream().filter(message -> MessageReceiveHandler.shouldShow(message.addedTime())).toList();
     }
-
-
 }
