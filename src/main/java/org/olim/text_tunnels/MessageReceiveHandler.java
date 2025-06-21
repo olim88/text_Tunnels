@@ -46,7 +46,8 @@ public class MessageReceiveHandler {
         return true;
     }
 
-    private static boolean addMessage(Text message, boolean b) {
+    private static boolean addMessage(Text message, boolean overlay) {
+        if (overlay) return true;
         String plainText = Formatting.strip(message.getString());
         boolean modMessage = plainText.startsWith("[TextTunnels]");
         for (int index : tunnels.keySet()) {
