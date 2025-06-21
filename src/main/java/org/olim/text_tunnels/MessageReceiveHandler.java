@@ -10,6 +10,7 @@ import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +19,7 @@ import java.util.regex.PatternSyntaxException;
 public class MessageReceiveHandler {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final Int2ObjectMap<List<Integer>> tunnels = new Int2ObjectArrayMap<>();
+    private static final Int2ObjectMap<HashSet<Integer>> tunnels = new Int2ObjectArrayMap<>();
     private static List<Pattern> receivePrefixes;
     private static int currentTunnel;
 
@@ -39,7 +40,7 @@ public class MessageReceiveHandler {
         }
         tunnels.clear();
         for (int i = 0; i < channelReceivePrefix.size(); i++) {
-            tunnels.put(i, new ArrayList<>());
+            tunnels.put(i, new HashSet<>());
         }
         currentTunnel = -1;
         return true;
