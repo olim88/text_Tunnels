@@ -54,27 +54,33 @@ public class ButtonsHandler {
 
     public static void render(DrawContext context, int mouseX, int mouseY, float delta) {
         //render all the buttons
+        int index = -1;
         for (ButtonWidget button : activeButtons) {
             if (ConfigManager.get().mainConfig.buttonStyle.fancyStyle) {
-                customButtonRender(context, button);
+                customButtonRender(context, button, index);
             } else {
                 button.render(context, mouseX, mouseY, delta);
+                //draw gray outline for peaking
+                if (MessageReceiveHandler.isPeaking(index)) {
+                    drawBorder(context, button.getX(), button.getY(), button.getWidth(), button.getHeight(), 0xb0ffffff);
+                }
             }
+            index++;
         }
 
         //draw missed messages bubble
         if (!ConfigManager.get().mainConfig.unreadIndicators.enabled) return;
         int scale = ConfigManager.get().mainConfig.unreadIndicators.scale;
-        int index = 0;
+        index = 0;
         for (ButtonWidget button : activeButtons) {
             if (notificationIndicators.get(index)) {
                 //disable when channel is detected
-                if (button.isFocused()) {
+                if (button.isFocused() || MessageReceiveHandler.isPeaking(index - 1)) {
                     notificationIndicators.set(index, false);
                     continue;
                 }
                 MainConfig.IndicatorStyle style = ConfigManager.get().mainConfig.unreadIndicators.style;
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, style.getIdentifier(), button.getX() + button.getWidth() - (style.size/2) * scale, button.getY() - (4 * scale), 1f, 1f, style.size * scale, style.size * scale, style.size * scale, style.size * scale);
+                context.drawTexture(RenderPipelines.GUI_TEXTURED, style.getIdentifier(), button.getX() + button.getWidth() - (style.size / 2) * scale, button.getY() - (4 * scale), 1f, 1f, style.size * scale, style.size * scale, style.size * scale, style.size * scale);
             }
             index++;
         }
@@ -83,7 +89,6 @@ public class ButtonsHandler {
     public static void addNotificationIndicator(int index) {
         notificationIndicators.set(index, true);
     }
-
 
     public static void updatePositions(int x, int y, int height) {
         if (activeButtons.isEmpty()) {
@@ -115,16 +120,30 @@ public class ButtonsHandler {
     }
 
     public static void mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        int index = -1; //all button has index of minus 1
         for (ButtonWidget button : activeButtons) {
+            //check for normal click
             button.mouseClicked(mouseX, mouseY, mouseButton);
+            //check for right click
+            if (mouseButton == 1) {
+                if (button.isMouseOver(mouseX, mouseY)) {
+                    MessageReceiveHandler.updatePeaking(index);
+                }
+            }
+            index++;
         }
     }
 
-    public static void customButtonRender(DrawContext context, ButtonWidget button) {
+    public static void customButtonRender(DrawContext context, ButtonWidget button, int index) {
         //expand button height if its focused
         if (button.isFocused()) {
             button.setHeight(button.getHeight() + 4);
             button.setY(button.getY() - 4);
+        }
+        //half expand if peaking
+        if (MessageReceiveHandler.isPeaking(index)) {
+            button.setHeight(button.getHeight() + 2);
+            button.setY(button.getY() - 2);
         }
 
         context.fill(RenderPipelines.GUI, button.getX(), button.getY(), button.getX() + button.getWidth(), button.getY() + button.getHeight(), CLIENT.options.getTextBackgroundColor(Integer.MIN_VALUE));
@@ -136,5 +155,16 @@ public class ButtonsHandler {
             button.setHeight(button.getHeight() - 4);
             button.setY(button.getY() + 4);
         }
+        if (MessageReceiveHandler.isPeaking(index)) {
+            button.setHeight(button.getHeight() - 2);
+            button.setY(button.getY() + 2);
+        }
+    }
+
+    public static void drawBorder(DrawContext context, int x, int y, int width, int height, int color) {
+        context.fill(x, y, x + width, y + 1, color);
+        context.fill(x, y + height - 1, x + width, y + height, color);
+        context.fill(x, y + 1, x + 1, y + height - 1, color);
+        context.fill(x + width - 1, y + 1, x + width, y + height - 1, color);
     }
 }

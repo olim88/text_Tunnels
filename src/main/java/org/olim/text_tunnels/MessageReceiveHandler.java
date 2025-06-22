@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.olim.text_tunnels.config.ConfigManager;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class MessageReceiveHandler {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Int2ObjectMap<HashSet<Integer>> tunnels = new Int2ObjectArrayMap<>();
     private static List<Pattern> receivePrefixes;
+    private static final List<Integer> peaking = new ArrayList<>();
     private static int currentTunnel;
 
     public static void init() {
@@ -69,9 +71,11 @@ public class MessageReceiveHandler {
 
     public static void clear() {
         tunnels.clear();
+        peaking.clear();
     }
 
     protected static void updateTunnel(int newTunnel) {
+        peaking.clear();
         if (tunnels.containsKey(newTunnel)) {
             currentTunnel = newTunnel;
             LOGGER.info("[TextTunnels] switching to tunnel \"{}\"", newTunnel);
@@ -82,9 +86,39 @@ public class MessageReceiveHandler {
         LOGGER.info("[TextTunnels] trying to show non existent tunnel \"{}\"", newTunnel);
     }
 
+    /**
+     * Enable peaking for given chanel index
+     *
+     * @param newPeaking channel to peak
+     */
+    protected static void updatePeaking(int newPeaking) {
+        if (newPeaking == currentTunnel || !ConfigManager.get().mainConfig.peakingEnabled || newPeaking == -1 || currentTunnel == -1) return;
+        if (peaking.contains(newPeaking)) {
+            peaking.removeIf(i -> i == newPeaking);
+            LOGGER.info("[TextTunnels] stop peaking \"{}\"", newPeaking);
+        } else {
+            peaking.add(newPeaking);
+            LOGGER.info("[TextTunnels] peaking \"{}\"", newPeaking);
+        }
+    }
+
+    protected static boolean isPeaking(int channelIndex) {
+        return peaking.contains(channelIndex);
+    }
+
     public static boolean shouldShow(int addedTime) {
         if (tunnels.containsKey(currentTunnel)) {
-            return tunnels.get(currentTunnel).contains(addedTime);
+            if (tunnels.get(currentTunnel).contains(addedTime)) {
+                return true;
+            }
+            //check peaking as well
+            if (!ConfigManager.get().mainConfig.peakingEnabled) return false;
+            for (int tunnel : peaking) {
+                if (tunnels.get(tunnel).contains(addedTime)) {
+                    return true;
+                }
+            }
+            return false;
 
         }
         //if somehow key does not exist just show everything

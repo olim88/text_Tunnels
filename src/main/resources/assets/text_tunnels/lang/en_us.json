@@ -4,6 +4,8 @@
   "text_tunnels.config.main.name": "Main settings",
   "text_tunnels.config.main.enabled": "Enable Text Tunnels",
   "text_tunnels.config.main.enabled.@Tooltip": "Toggle all the feature of this mod on and off",
+  "text_tunnels.config.main.peakingEnabled": "Enable Peaking",
+  "text_tunnels.config.main.peakingEnabled.@Tooltip": "Enable right clicking on a channel to add it to your feed of visible messages",
   "text_tunnels.config.main.description": "All non server dependent settings",
   "text_tunnels.config.main.buttonStyle": "Button Style",
   "text_tunnels.config.main.buttonStyle.spacing": "Horizontal Spacing",
