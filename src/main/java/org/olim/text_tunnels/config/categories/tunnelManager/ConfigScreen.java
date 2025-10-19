@@ -12,7 +12,7 @@ import org.olim.text_tunnels.config.configs.ServersConfig;
 
 public class ConfigScreen extends Screen {
 
-    private coinfgListWidget TunnelsListWidget;
+    private configListWidget TunnelsListWidget;
     private final Screen parent;
     private final ServersConfig config;
 
@@ -26,7 +26,7 @@ public class ConfigScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        TunnelsListWidget = new coinfgListWidget(client, this, config.tunnelConfigs, width, height - 96, 32, 25);
+        TunnelsListWidget = new configListWidget(client, this, config.tunnelConfigs, width, height - 96, 32, 25);
         addDrawableChild(TunnelsListWidget);
 
         GridWidget gridWidget = new GridWidget();

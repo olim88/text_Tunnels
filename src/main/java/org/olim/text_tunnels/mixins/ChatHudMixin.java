@@ -54,7 +54,7 @@ public class ChatHudMixin {
         return filterVisible();
     }
 
-    @Redirect(method = "method_71990", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
+    @Redirect(method = "forEachVisibleLine", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
     private List<ChatHudLine.Visible> edit71990(ChatHud instance) {
         return filterVisible();
     }

@@ -1,5 +1,6 @@
 package org.olim.text_tunnels.mixins;
 
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -32,8 +33,8 @@ public class ChatScreenMixin {
     }
 
     @Inject(method = "mouseClicked", at= @At("RETURN"))
-    private void mouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-        ButtonsHandler.mouseClicked(mouseX, mouseY, button);
+    private void mouseClicked(Click click, boolean doubled, CallbackInfoReturnable<Boolean> cir) {
+        ButtonsHandler.mouseClicked(click, doubled);
     }
 
     @ModifyVariable(method = "sendMessage", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)

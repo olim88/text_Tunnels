@@ -3,6 +3,7 @@ package org.olim.text_tunnels;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.RenderLayer;
@@ -119,14 +120,14 @@ public class ButtonsHandler {
 
     }
 
-    public static void mouseClicked(double mouseX, double mouseY, int mouseButton) {
+    public static void mouseClicked(Click click, boolean doubled) {
         int index = -1; //all button has index of minus 1
         for (ButtonWidget button : activeButtons) {
             //check for normal click
-            button.mouseClicked(mouseX, mouseY, mouseButton);
+            button.mouseClicked(click, doubled);
             //check for right click
-            if (mouseButton == 1) {
-                if (button.isMouseOver(mouseX, mouseY)) {
+            if (click.button() == 1) {
+                if (button.isMouseOver(click.x(), click.y())) {
                     MessageReceiveHandler.updatePeaking(index);
                 }
             }

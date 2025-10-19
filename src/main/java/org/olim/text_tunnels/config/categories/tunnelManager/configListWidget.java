@@ -17,11 +17,11 @@ import org.olim.text_tunnels.config.configs.TunnelConfig;
 import java.awt.*;
 import java.util.List;
 
-public class coinfgListWidget extends ElementListWidget<coinfgListWidget.AbstractEntry> {
+public class configListWidget extends ElementListWidget<configListWidget.AbstractEntry> {
     private final ConfigScreen screen;
     private final List<TunnelConfig> allChannels;
 
-    public coinfgListWidget(MinecraftClient minecraftClient, ConfigScreen screen, List<TunnelConfig> allChannels, int i, int j, int k, int l) {
+    public configListWidget(MinecraftClient minecraftClient, ConfigScreen screen, List<TunnelConfig> allChannels, int i, int j, int k, int l) {
         super(minecraftClient, i, j, k, l);
         this.screen = screen;
         this.allChannels = allChannels;
@@ -38,7 +38,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
         int newIndex = Math.max(children().indexOf(getSelectedOrNull()), 0);
 
         allChannels.add(newIndex, new TunnelConfig());
-        children().add(newIndex + 1, new TunnelEntry(allChannels.get(newIndex)));
+        this.addEntry(new TunnelEntry(allChannels.get(newIndex)));
     }
 
     protected void saveRules() {
@@ -55,11 +55,7 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
         return super.getScrollbarX() + 50;
     }
 
-    protected boolean removeEntry(AbstractEntry entry) {
-        return super.removeEntry(entry);
-    }
-
-    protected static abstract class AbstractEntry extends ElementListWidget.Entry<coinfgListWidget.AbstractEntry> {
+    protected static abstract class AbstractEntry extends ElementListWidget.Entry<configListWidget.AbstractEntry> {
     }
 
     private class LabelsEntry extends AbstractEntry {
@@ -74,10 +70,10 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
         }
 
         @Override
-        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.newTunnel"), width / 2 - 125, y + 5, 0xFFFFFFFF);
-            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.tunnelEnabled"), width / 2, y + 5, 0xFFFFFFFF);
-            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("ext_tunnels.config.tunnelConfig.configList.modify"), width / 2 + 100, y + 5, 0xFFFFFFFF);
+        public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.newTunnel"), width / 2 - 125, this.getY() + 5, 0xFFFFFFFF);
+            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.tunnelEnabled"), width / 2, this.getY() + 5, 0xFFFFFFFF);
+            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("ext_tunnels.config.tunnelConfig.configList.modify"), width / 2 + 100, this.getY() + 5, 0xFFFFFFFF);
         }
     }
 
@@ -131,6 +127,8 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
         private void toggleEnabled() {
             tunnel.enabled = !tunnel.enabled;
             enabledButton.setMessage(enabledButtonText());
+
+
         }
 
         private void deleteEntry(boolean confirmedAction) {
@@ -164,16 +162,16 @@ public class coinfgListWidget extends ElementListWidget<coinfgListWidget.Abstrac
         }
 
         @Override
-        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             //widgets
-            enabledButton.setY(y);
+            enabledButton.setY(this.getY());
             enabledButton.render(context, mouseX, mouseY, tickDelta);
-            openConfigButton.setY(y);
+            openConfigButton.setY(this.getY());
             openConfigButton.render(context, mouseX, mouseY, tickDelta);
-            deleteButton.setY(y);
+            deleteButton.setY(this.getY());
             deleteButton.render(context, mouseX, mouseY, tickDelta);
             //text
-            context.drawCenteredTextWithShadow(client.textRenderer, tunnel.name, nameX, y + 5, 0xFFFFFFFF);
+            context.drawCenteredTextWithShadow(client.textRenderer, tunnel.name, nameX, this.getY() + 5, 0xFFFFFFFF);
         }
 
     }
