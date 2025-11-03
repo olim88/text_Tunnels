@@ -1,15 +1,11 @@
 package org.olim.text_tunnels;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import org.olim.text_tunnels.config.ConfigManager;
 import org.olim.text_tunnels.config.configs.MainConfig;
@@ -77,7 +73,7 @@ public class ButtonsHandler {
             if (notificationIndicators.get(index)) {
                 //disable when channel is detected
                 if (button.isFocused() || MessageReceiveHandler.isPeaking(index - 1)) {
-                    notificationIndicators.set(index, false);
+                    if (notificationIndicators.size() > index) notificationIndicators.set(index, false);
                     continue;
                 }
                 MainConfig.IndicatorStyle style = ConfigManager.get().mainConfig.unreadIndicators.style;
@@ -88,7 +84,7 @@ public class ButtonsHandler {
     }
 
     public static void addNotificationIndicator(int index) {
-        notificationIndicators.set(index, true);
+        if (notificationIndicators.size() > index) notificationIndicators.set(index, true);
     }
 
     public static void updatePositions(int x, int y, int height) {
