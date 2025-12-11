@@ -18,7 +18,7 @@ public class ChatScreenMixin {
     @Shadow
     protected TextFieldWidget chatField;
 
-    @Inject(method = "resize", at = @At("RETURN"))
+    @Inject(method = "resize", at = @At("TAIL"))
     private void afterResize(CallbackInfo ci) {
         ButtonsHandler.updatePositions(chatField.getX(), chatField.getY(), chatField.getHeight());
     }

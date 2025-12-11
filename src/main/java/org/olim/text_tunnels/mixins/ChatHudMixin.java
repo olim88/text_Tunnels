@@ -24,32 +24,18 @@ public class ChatHudMixin {
     @Final
     private List<ChatHudLine.Visible> visibleMessages;
 
-    @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
+    @Redirect(method = "render(Lnet/minecraft/client/gui/hud/ChatHud$Backend;IIZ)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
     private List<ChatHudLine.Visible> beforeRender(ChatHud instance) {
         return filterVisible();
     }
+
 
     @Redirect(method = "scroll", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
     private List<ChatHudLine.Visible> editVisibleForScroll(ChatHud instance) {
         return filterVisible();
     }
 
-    @Redirect(method = "getTextStyleAt", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
-    private List<ChatHudLine.Visible> editVisibleForGetTextStyleAt(ChatHud instance) {
-        return filterVisible();
-    }
-
-    @Redirect(method = "getIndicatorAt", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
-    private List<ChatHudLine.Visible> editVisibleForGetIndicatorAt(ChatHud instance) {
-        return filterVisible();
-    }
-
-    @Redirect(method = "getMessageIndex", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
-    private List<ChatHudLine.Visible> editVisibleForGetMessageIndex(ChatHud instance) {
-        return filterVisible();
-    }
-
-    @Redirect(method = "getMessageLineIndex", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
+    @Redirect(method = "refresh", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
     private List<ChatHudLine.Visible> editVisibleForGetMessageLineIndex(ChatHud instance) {
         return filterVisible();
     }
