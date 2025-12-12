@@ -51,6 +51,7 @@ public class MessageReceiveHandler {
     private static boolean addMessage(Text message, boolean overlay) {
         if (overlay) return true;
         String plainText = Formatting.strip(message.getString());
+        boolean shouldNotifyALl = true;
         boolean modMessage = plainText.startsWith("[TextTunnels]");
         for (int index : tunnels.keySet()) {
             Pattern pattern = receivePrefixes.get(index);
@@ -62,9 +63,15 @@ public class MessageReceiveHandler {
                 if (!modMessage) {
                     Text_tunnels.updateLastMatch(index, match);
                 }
+                //if the message gets sent to a channel that is currently being viewed there is no need to add a notification to the all channel
+                if (index == currentTunnel || peaking.contains(index)) {
+                    shouldNotifyALl = false;
+                }
             }
         }
-        ButtonsHandler.addNotificationIndicator(0);
+        if (shouldNotifyALl) {
+            ButtonsHandler.addNotificationIndicator(0);
+        }
         //if tunnel can not be found do not add it to tunnel
         return true;
     }
@@ -92,7 +99,8 @@ public class MessageReceiveHandler {
      * @param newPeaking channel to peak
      */
     protected static void updatePeaking(int newPeaking) {
-        if (newPeaking == currentTunnel || !ConfigManager.get().mainConfig.peakingEnabled || newPeaking == -1 || currentTunnel == -1) return;
+        if (newPeaking == currentTunnel || !ConfigManager.get().mainConfig.peakingEnabled || newPeaking == -1 || currentTunnel == -1)
+            return;
         if (peaking.contains(newPeaking)) {
             peaking.removeIf(i -> i == newPeaking);
             LOGGER.info("[TextTunnels] stop peaking \"{}\"", newPeaking);
