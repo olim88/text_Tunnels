@@ -16,6 +16,7 @@ import org.olim.text_tunnels.config.configs.TunnelConfig;
 
 import java.awt.*;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class configListWidget extends ElementListWidget<configListWidget.AbstractEntry> {
     private final ConfigScreen screen;
@@ -26,6 +27,13 @@ public class configListWidget extends ElementListWidget<configListWidget.Abstrac
         this.screen = screen;
         this.allChannels = allChannels;
 
+        fillOutList();
+    }
+
+    /**
+     * Fills out the list with the header and then all current tunnels
+     */
+    private void fillOutList(){
         //add labels
         addEntry(new LabelsEntry());
         //add tunnels
@@ -34,11 +42,24 @@ public class configListWidget extends ElementListWidget<configListWidget.Abstrac
         }
     }
 
-    protected void addRuleAfterSelected() {
-        int newIndex = Math.max(children().indexOf(getSelectedOrNull()), 0);
+    protected void addRule() {
+        allChannels.add(new TunnelConfig());
+        this.addEntry(new TunnelEntry(allChannels.getLast()));
+    }
 
-        allChannels.add(newIndex, new TunnelConfig());
-        this.addEntry(new TunnelEntry(allChannels.get(newIndex)));
+    /**
+     * Swaps the order of 2 given indexes. They must be both within r
+     * @param oldIndex first index
+     * @param newIndex second index
+     */
+    protected void changeOrder(int oldIndex, int newIndex) throws IndexOutOfBoundsException {
+        //update channels
+        TunnelConfig temp = allChannels.get(newIndex);
+        allChannels.set(newIndex, allChannels.get(oldIndex));
+        allChannels.set(oldIndex, temp);
+        //update entry's
+        this.clearEntries();
+        fillOutList();
     }
 
     protected void saveRules() {
@@ -47,7 +68,7 @@ public class configListWidget extends ElementListWidget<configListWidget.Abstrac
 
     @Override
     public int getRowWidth() {
-        return super.getRowWidth() + 100;
+        return super.getRowWidth() + 200;
     }
 
     @Override
@@ -73,7 +94,8 @@ public class configListWidget extends ElementListWidget<configListWidget.Abstrac
         public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.newTunnel"), width / 2 - 125, this.getY() + 5, 0xFFFFFFFF);
             context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.tunnelEnabled"), width / 2, this.getY() + 5, 0xFFFFFFFF);
-            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("ext_tunnels.config.tunnelConfig.configList.modify"), width / 2 + 100, this.getY() + 5, 0xFFFFFFFF);
+            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.modify"), width / 2 + 100, this.getY() + 5, 0xFFFFFFFF);
+            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.reorder"), width / 2 + 185, this.getY() + 5, 0xFFFFFFFF);
         }
     }
 
@@ -87,6 +109,8 @@ public class configListWidget extends ElementListWidget<configListWidget.Abstrac
         private final ButtonWidget enabledButton;
         private final ButtonWidget openConfigButton;
         private final ButtonWidget deleteButton;
+        private final ButtonWidget moveUpButton;
+        private final ButtonWidget moveDownButton;
 
         //text location
         private final int nameX = width / 2 - 125;
@@ -112,8 +136,16 @@ public class configListWidget extends ElementListWidget<configListWidget.Abstrac
                     .size(50, 20)
                     .position(width / 2 + 105, 5)
                     .build();
+            moveUpButton = ButtonWidget.builder(Text.literal("↑"), a -> moveUp())
+                    .size(20, 20)
+                    .position(width / 2 + 165, 5)
+                    .build();
+            moveDownButton = ButtonWidget.builder(Text.literal("↓"), a -> moveDown())
+                    .size(20, 20)
+                    .position(width / 2 + 190, 5)
+                    .build();
 
-            children = List.of(enabledButton, openConfigButton, deleteButton);
+            children = List.of(enabledButton, openConfigButton, deleteButton, moveUpButton, moveDownButton);
         }
 
         private Text enabledButtonText() {
@@ -131,11 +163,24 @@ public class configListWidget extends ElementListWidget<configListWidget.Abstrac
 
         }
 
+        private void moveUp() {
+            int currentIndex = allChannels.indexOf(tunnel);
+            if (currentIndex == 0) return;
+            changeOrder(currentIndex, currentIndex - 1);
+        }
+
+        private void moveDown() {
+            int currentIndex = allChannels.indexOf(tunnel);
+            //do not change if not possible
+            if (currentIndex >= allChannels.size() - 1) return;
+            changeOrder(currentIndex, currentIndex + 1);
+        }
+
         private void deleteEntry(boolean confirmedAction) {
             if (confirmedAction) {
                 //delete this
                 allChannels.remove(tunnel);
-                removeEntry(this);
+                removeEntryWithoutScrolling(this);
             }
 
             client.setScreen(screen);
@@ -170,6 +215,10 @@ public class configListWidget extends ElementListWidget<configListWidget.Abstrac
             openConfigButton.render(context, mouseX, mouseY, tickDelta);
             deleteButton.setY(this.getY());
             deleteButton.render(context, mouseX, mouseY, tickDelta);
+            moveUpButton.setY(this.getY());
+            moveUpButton.render(context, mouseX, mouseY, tickDelta);
+            moveDownButton.setY(this.getY());
+            moveDownButton.render(context, mouseX, mouseY, tickDelta);
             //text
             context.drawCenteredTextWithShadow(client.textRenderer, tunnel.name, nameX, this.getY() + 5, 0xFFFFFFFF);
         }
