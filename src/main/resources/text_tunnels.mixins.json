@@ -5,6 +5,7 @@
   "client": [
     "ChatHudMixin",
     "ChatScreenMixin",
+    "ClientPlayerNetworkHandlerMixin",
     "MultiplayerScreenMixin"
   ],
   "injectors": {

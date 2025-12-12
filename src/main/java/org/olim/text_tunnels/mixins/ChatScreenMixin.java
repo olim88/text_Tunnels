@@ -19,30 +19,24 @@ public class ChatScreenMixin {
     protected TextFieldWidget chatField;
 
     @Inject(method = "resize", at = @At("TAIL"))
-    private void afterResize(CallbackInfo ci) {
+    private void textTunnels$afterResize(CallbackInfo ci) {
         ButtonsHandler.updatePositions(chatField.getX(), chatField.getY(), chatField.getHeight());
     }
     @Inject(method = "init", at = @At("RETURN"))
-    private void afterInit(CallbackInfo ci) {
+    private void textTunnels$afterInit(CallbackInfo ci) {
         ButtonsHandler.updatePositions(chatField.getX(), chatField.getY(), chatField.getHeight());
     }
 
     @Inject(method = "render", at = @At("HEAD"))
-    private void afterRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void textTunnels$afterRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         ButtonsHandler.render(context, mouseX, mouseY, delta);
     }
 
     @Inject(method = "mouseClicked", at= @At("RETURN"))
-    private void mouseClicked(Click click, boolean doubled, CallbackInfoReturnable<Boolean> cir) {
+    private void textTunnels$mouseClicked(Click click, boolean doubled, CallbackInfoReturnable<Boolean> cir) {
         ButtonsHandler.mouseClicked(click, doubled);
     }
 
-    @ModifyVariable(method = "sendMessage", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
-    private String sendMessage(String chatText) {
-        //do not try to edit commands;
-        if (chatText.startsWith("/")){
-            return chatText;
-        }
-        return MessageSendHandler.getPrefix() + chatText;
-    }
+
+
 }

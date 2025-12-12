@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MultiplayerScreenMixin {
 
     @Inject(method = "connect(Lnet/minecraft/client/network/ServerInfo;)V",at=@At("HEAD"))
-    public void connect(ServerInfo serverInfo, CallbackInfo ci) {
+    public void textTunnels$connect(ServerInfo serverInfo, CallbackInfo ci) {
         //make sure server is in config
         ManageServerConfigs.updateSeverList();
 

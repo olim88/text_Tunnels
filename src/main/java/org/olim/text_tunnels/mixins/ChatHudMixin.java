@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(ChatHud.class)
@@ -25,23 +24,23 @@ public class ChatHudMixin {
     private List<ChatHudLine.Visible> visibleMessages;
 
     @Redirect(method = "render(Lnet/minecraft/client/gui/hud/ChatHud$Backend;IIZ)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
-    private List<ChatHudLine.Visible> beforeRender(ChatHud instance) {
+    private List<ChatHudLine.Visible> textTunnels$beforeRender(ChatHud instance) {
         return filterVisible();
     }
 
 
     @Redirect(method = "scroll", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
-    private List<ChatHudLine.Visible> editVisibleForScroll(ChatHud instance) {
+    private List<ChatHudLine.Visible> textTunnels$editVisibleForScroll(ChatHud instance) {
         return filterVisible();
     }
 
     @Redirect(method = "refresh", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
-    private List<ChatHudLine.Visible> editVisibleForGetMessageLineIndex(ChatHud instance) {
+    private List<ChatHudLine.Visible> textTunnels$editRefresh(ChatHud instance) {
         return filterVisible();
     }
 
     @Redirect(method = "forEachVisibleLine", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
-    private List<ChatHudLine.Visible> edit71990(ChatHud instance) {
+    private List<ChatHudLine.Visible> textTunnels$editForEachVisible(ChatHud instance) {
         return filterVisible();
     }
 
