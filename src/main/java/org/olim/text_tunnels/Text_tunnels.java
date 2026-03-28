@@ -3,7 +3,7 @@ package org.olim.text_tunnels;
 import com.mojang.brigadier.Command;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -29,7 +29,7 @@ public class Text_tunnels implements ClientModInitializer {
         //load config
         ConfigManager.init();
         //set up command
-        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> dispatcher.register(ClientCommandManager.literal("textTunnels").executes(source -> openConfig()))));
+        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> dispatcher.register(ClientCommands.literal("textTunnels").executes(source -> openConfig()))));
         //init other inits
         MessageReceiveHandler.init();
 

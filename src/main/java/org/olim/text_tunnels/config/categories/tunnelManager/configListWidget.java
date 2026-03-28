@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.logging.Logger;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -91,11 +91,11 @@ public class configListWidget extends ContainerObjectSelectionList<configListWid
         }
 
         @Override
-        public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            context.drawCenteredString(minecraft.font, Component.translatable("text_tunnels.config.tunnelConfig.configList.newTunnel"), width / 2 - 125, this.getY() + 5, 0xFFFFFFFF);
-            context.drawCenteredString(minecraft.font, Component.translatable("text_tunnels.config.tunnelConfig.configList.tunnelEnabled"), width / 2, this.getY() + 5, 0xFFFFFFFF);
-            context.drawCenteredString(minecraft.font, Component.translatable("text_tunnels.config.tunnelConfig.configList.modify"), width / 2 + 100, this.getY() + 5, 0xFFFFFFFF);
-            context.drawCenteredString(minecraft.font, Component.translatable("text_tunnels.config.tunnelConfig.configList.reorder"), width / 2 + 185, this.getY() + 5, 0xFFFFFFFF);
+        public void extractContent(GuiGraphicsExtractor context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            context.centeredText(minecraft.font, Component.translatable("text_tunnels.config.tunnelConfig.configList.newTunnel"), width / 2 - 125, this.getY() + 5, 0xFFFFFFFF);
+            context.centeredText(minecraft.font, Component.translatable("text_tunnels.config.tunnelConfig.configList.tunnelEnabled"), width / 2, this.getY() + 5, 0xFFFFFFFF);
+            context.centeredText(minecraft.font, Component.translatable("text_tunnels.config.tunnelConfig.configList.modify"), width / 2 + 100, this.getY() + 5, 0xFFFFFFFF);
+            context.centeredText(minecraft.font, Component.translatable("text_tunnels.config.tunnelConfig.configList.reorder"), width / 2 + 185, this.getY() + 5, 0xFFFFFFFF);
         }
     }
 
@@ -207,20 +207,20 @@ public class configListWidget extends ContainerObjectSelectionList<configListWid
         }
 
         @Override
-        public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void extractContent(GuiGraphicsExtractor context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             //widgets
             enabledButton.setY(this.getY());
-            enabledButton.render(context, mouseX, mouseY, tickDelta);
+            enabledButton.extractRenderState(context, mouseX, mouseY, tickDelta);
             openConfigButton.setY(this.getY());
-            openConfigButton.render(context, mouseX, mouseY, tickDelta);
+            openConfigButton.extractRenderState(context, mouseX, mouseY, tickDelta);
             deleteButton.setY(this.getY());
-            deleteButton.render(context, mouseX, mouseY, tickDelta);
+            deleteButton.extractRenderState(context, mouseX, mouseY, tickDelta);
             moveUpButton.setY(this.getY());
-            moveUpButton.render(context, mouseX, mouseY, tickDelta);
+            moveUpButton.extractRenderState(context, mouseX, mouseY, tickDelta);
             moveDownButton.setY(this.getY());
-            moveDownButton.render(context, mouseX, mouseY, tickDelta);
+            moveDownButton.extractRenderState(context, mouseX, mouseY, tickDelta);
             //text
-            context.drawCenteredString(minecraft.font, tunnel.name, nameX, this.getY() + 5, 0xFFFFFFFF);
+            context.centeredText(minecraft.font, tunnel.name, nameX, this.getY() + 5, 0xFFFFFFFF);
         }
 
     }

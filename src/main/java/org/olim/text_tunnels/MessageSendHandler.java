@@ -58,7 +58,7 @@ public class MessageSendHandler {
                         LOGGER.error("[TextTunnels] not enough groups in receive prefix to fill in send prefix");
                         LOGGER.error("[TextTunnels] can not get group {} out of {} groups", index, replacements.groupCount());
                         if (CLIENT.player != null) {
-                            CLIENT.player.displayClientMessage(Component.translatable("text_tunnels.MessageSendHandler.error", index, replacements.groupCount()).withStyle(ChatFormatting.RED), false);
+                            CLIENT.player.sendSystemMessage(Component.translatable("text_tunnels.MessageSendHandler.error", index, replacements.groupCount()).withStyle(ChatFormatting.RED));
                         }
 
                     } else {
@@ -70,7 +70,7 @@ public class MessageSendHandler {
                 else {
                     LOGGER.info("[TextTunnels] Can not replace group with out existing matched message");
                     if (CLIENT.player != null) {
-                        CLIENT.player.displayClientMessage(Component.translatable("text_tunnels.MessageSendHandler.noExistingError").withStyle(ChatFormatting.YELLOW), false);
+                        CLIENT.player.sendSystemMessage(Component.translatable("text_tunnels.MessageSendHandler.noExistingError").withStyle(ChatFormatting.YELLOW));
                     }
                 }
                 prefix = prefix.replace(foundGroup, "");//todo tell the user about this

@@ -36,7 +36,7 @@ public class MessageReceiveHandler {
         } catch (PatternSyntaxException e) {
             LOGGER.error("[TextTunnels] invalid receive prefix: {}", e.getMessage());
             if (CLIENT.player != null) {
-                CLIENT.player.displayClientMessage(Component.translatable("text_tunnels.messageReceiveHandler.error", e.getPattern()).withStyle(ChatFormatting.RED), false);
+                CLIENT.player.sendSystemMessage(Component.translatable("text_tunnels.messageReceiveHandler.error", e.getPattern()).withStyle(ChatFormatting.RED));
             }
             return false;
         }

@@ -1,6 +1,6 @@
 package org.olim.text_tunnels.mixins;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -27,8 +27,8 @@ public class ChatScreenMixin {
         ButtonsHandler.updatePositions(input.getX(), input.getY(), input.getHeight());
     }
 
-    @Inject(method = "render", at = @At("HEAD"))
-    private void textTunnels$afterRender(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    @Inject(method = "extractRenderState", at = @At("HEAD"))
+    private void textTunnels$afterRender(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         ButtonsHandler.render(context, mouseX, mouseY, delta);
     }
 

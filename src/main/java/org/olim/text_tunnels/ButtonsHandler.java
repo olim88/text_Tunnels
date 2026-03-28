@@ -1,12 +1,13 @@
 package org.olim.text_tunnels;
 
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import org.olim.text_tunnels.config.ConfigManager;
 import org.olim.text_tunnels.config.configs.MainConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -49,14 +50,14 @@ public class ButtonsHandler {
         updateFocus(pressedButton);
     }
 
-    public static void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    public static void render(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
         //render all the buttons
         int index = -1;
         for (Button button : activeButtons) {
             if (ConfigManager.get().mainConfig.buttonStyle.fancyStyle) {
                 customButtonRender(context, button, index);
             } else {
-                button.render(context, mouseX, mouseY, delta);
+                button.extractRenderState(context, mouseX, mouseY, delta);
                 //draw gray outline for peaking
                 if (MessageReceiveHandler.isPeaking(index)) {
                     drawBorder(context, button.getX(), button.getY(), button.getWidth(), button.getHeight(), 0xb0ffffff);
@@ -131,7 +132,7 @@ public class ButtonsHandler {
         }
     }
 
-    public static void customButtonRender(GuiGraphics context, Button button, int index) {
+    public static void customButtonRender(GuiGraphicsExtractor context, Button button, int index) {
         //expand button height if its focused
         if (button.isFocused()) {
             button.setHeight(button.getHeight() + 4);
@@ -146,7 +147,7 @@ public class ButtonsHandler {
         context.fill(RenderPipelines.GUI, button.getX(), button.getY(), button.getX() + button.getWidth(), button.getY() + button.getHeight(), CLIENT.options.getBackgroundColor(Integer.MIN_VALUE));
 
         int i = button.active ? 16777215 : 10526880;
-        context.drawString(CLIENT.font, button.getMessage(), button.getX() + 2, button.getY() + 2, i | Mth.ceil(255.0F) << 24, true);
+        context.text(CLIENT.font, button.getMessage(), button.getX() + 2, button.getY() + 2, i | Mth.ceil(255.0F) << 24, true);
 
         // reset button height
         if (button.isFocused()) {
@@ -159,7 +160,7 @@ public class ButtonsHandler {
         }
     }
 
-    public static void drawBorder(GuiGraphics context, int x, int y, int width, int height, int color) {
+    public static void drawBorder(GuiGraphicsExtractor context, int x, int y, int width, int height, int color) {
         context.fill(x, y, x + width, y + 1, color);
         context.fill(x, y + height - 1, x + width, y + height, color);
         context.fill(x, y + 1, x + 1, y + height - 1, color);
