@@ -5,9 +5,8 @@ import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import org.olim.text_tunnels.ManageServerConfigs;
 import org.olim.text_tunnels.Text_tunnels;
 import org.olim.text_tunnels.config.categories.mainCategory;
@@ -45,7 +44,7 @@ public class ConfigManager {
     public static Screen getConfigScreen(Screen parentScreen) {
         ManageServerConfigs.updateSeverList();
         return YetAnotherConfigLib.create(HANDLER, (defaults, config, builder) -> {
-            builder.title(Text.translatable("text_tunnels.config.name"))
+            builder.title(Component.translatable("text_tunnels.config.name"))
                     .category(mainCategory.create(defaults, config))
                     .categories(serversCategory.create(defaults, config))
                     .save(ConfigManager::save)

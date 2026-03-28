@@ -1,12 +1,12 @@
 package org.olim.text_tunnels.config.categories.tunnelManager;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.GridWidget;
-import net.minecraft.client.gui.widget.SimplePositioningWidget;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.layouts.FrameLayout;
+import net.minecraft.client.gui.layouts.GridLayout;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import org.olim.text_tunnels.config.ConfigManager;
 import org.olim.text_tunnels.config.configs.ServersConfig;
 
@@ -17,7 +17,7 @@ public class ConfigScreen extends Screen {
     private final ServersConfig config;
 
     public ConfigScreen(Screen parent, ServersConfig serverConfig) {
-        super(Text.translatable("text_tunnels.config.tunnelConfig.config.for", serverConfig.name));
+        super(Component.translatable("text_tunnels.config.tunnelConfig.config.for", serverConfig.name));
         this.parent = parent;
         config = serverConfig;
 
@@ -26,37 +26,37 @@ public class ConfigScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        TunnelsListWidget = new configListWidget(client, this, config.tunnelConfigs, width, height - 96, 32, 25);
-        addDrawableChild(TunnelsListWidget);
+        TunnelsListWidget = new configListWidget(minecraft, this, config.tunnelConfigs, width, height - 96, 32, 25);
+        addRenderableWidget(TunnelsListWidget);
 
-        GridWidget gridWidget = new GridWidget();
-        gridWidget.getMainPositioner().marginX(5).marginY(2);
-        GridWidget.Adder adder = gridWidget.createAdder(3);
-        ButtonWidget buttonNew = ButtonWidget.builder(Text.translatable("text_tunnels.config.tunnelConfig.config.newTunnel"), button -> TunnelsListWidget.addRule()).build();
-        adder.add(buttonNew);
-        ButtonWidget buttonDone = ButtonWidget.builder(ScreenTexts.DONE, button -> {
+        GridLayout gridWidget = new GridLayout();
+        gridWidget.defaultCellSetting().paddingHorizontal(5).paddingVertical(2);
+        GridLayout.RowHelper adder = gridWidget.createRowHelper(3);
+        Button buttonNew = Button.builder(Component.translatable("text_tunnels.config.tunnelConfig.config.newTunnel"), button -> TunnelsListWidget.addRule()).build();
+        adder.addChild(buttonNew);
+        Button buttonDone = Button.builder(CommonComponents.GUI_DONE, button -> {
             TunnelsListWidget.saveRules();
-            if (client != null) {
-                close();
+            if (minecraft != null) {
+                onClose();
             }
         }).build();
-        adder.add(buttonDone);
-        gridWidget.refreshPositions();
-        SimplePositioningWidget.setPos(gridWidget, 0, this.height - 64, this.width, 64);
-        gridWidget.forEachChild(this::addDrawableChild);
+        adder.addChild(buttonDone);
+        gridWidget.arrangeElements();
+        FrameLayout.centerInRectangle(gridWidget, 0, this.height - 64, this.width, 64);
+        gridWidget.visitWidgets(this::addRenderableWidget);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 16, 0xFFFFFFFF);
+        context.drawCenteredString(this.font, this.title, this.width / 2, 16, 0xFFFFFFFF);
     }
 
     @Override
-    public void close() {
+    public void onClose() {
         ConfigManager.save();
-        if (client != null) {
-            this.client.setScreen(parent);
+        if (minecraft != null) {
+            this.minecraft.setScreen(parent);
         }
 
     }

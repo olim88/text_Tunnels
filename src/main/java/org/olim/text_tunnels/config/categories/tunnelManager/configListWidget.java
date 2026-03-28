@@ -1,28 +1,28 @@
 package org.olim.text_tunnels.config.categories.tunnelManager;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.screen.ConfirmScreen;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.screen.narration.NarrationPart;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
 import org.olim.text_tunnels.config.ConfigManager;
 import org.olim.text_tunnels.config.configs.TunnelConfig;
 
 import java.awt.*;
 import java.util.List;
 import java.util.logging.Logger;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ContainerObjectSelectionList;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.narration.NarratedElementType;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.ConfirmScreen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 
-public class configListWidget extends ElementListWidget<configListWidget.AbstractEntry> {
+public class configListWidget extends ContainerObjectSelectionList<configListWidget.AbstractEntry> {
     private final ConfigScreen screen;
     private final List<TunnelConfig> allChannels;
 
-    public configListWidget(MinecraftClient minecraftClient, ConfigScreen screen, List<TunnelConfig> allChannels, int i, int j, int k, int l) {
+    public configListWidget(Minecraft minecraftClient, ConfigScreen screen, List<TunnelConfig> allChannels, int i, int j, int k, int l) {
         super(minecraftClient, i, j, k, l);
         this.screen = screen;
         this.allChannels = allChannels;
@@ -72,30 +72,30 @@ public class configListWidget extends ElementListWidget<configListWidget.Abstrac
     }
 
     @Override
-    protected int getScrollbarX() {
-        return super.getScrollbarX() + 50;
+    protected int scrollBarX() {
+        return super.scrollBarX() + 50;
     }
 
-    protected static abstract class AbstractEntry extends ElementListWidget.Entry<configListWidget.AbstractEntry> {
+    protected static abstract class AbstractEntry extends ContainerObjectSelectionList.Entry<configListWidget.AbstractEntry> {
     }
 
     private class LabelsEntry extends AbstractEntry {
         @Override
-        public List<? extends Selectable> selectableChildren() {
+        public List<? extends NarratableEntry> narratables() {
             return List.of();
         }
 
         @Override
-        public List<? extends Element> children() {
+        public List<? extends GuiEventListener> children() {
             return List.of();
         }
 
         @Override
-        public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.newTunnel"), width / 2 - 125, this.getY() + 5, 0xFFFFFFFF);
-            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.tunnelEnabled"), width / 2, this.getY() + 5, 0xFFFFFFFF);
-            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.modify"), width / 2 + 100, this.getY() + 5, 0xFFFFFFFF);
-            context.drawCenteredTextWithShadow(client.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.configList.reorder"), width / 2 + 185, this.getY() + 5, 0xFFFFFFFF);
+        public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            context.drawCenteredString(minecraft.font, Component.translatable("text_tunnels.config.tunnelConfig.configList.newTunnel"), width / 2 - 125, this.getY() + 5, 0xFFFFFFFF);
+            context.drawCenteredString(minecraft.font, Component.translatable("text_tunnels.config.tunnelConfig.configList.tunnelEnabled"), width / 2, this.getY() + 5, 0xFFFFFFFF);
+            context.drawCenteredString(minecraft.font, Component.translatable("text_tunnels.config.tunnelConfig.configList.modify"), width / 2 + 100, this.getY() + 5, 0xFFFFFFFF);
+            context.drawCenteredString(minecraft.font, Component.translatable("text_tunnels.config.tunnelConfig.configList.reorder"), width / 2 + 185, this.getY() + 5, 0xFFFFFFFF);
         }
     }
 
@@ -103,14 +103,14 @@ public class configListWidget extends ElementListWidget<configListWidget.Abstrac
         //data
         private final TunnelConfig tunnel;
 
-        private final List<? extends Element> children;
+        private final List<? extends GuiEventListener> children;
 
         //widgets
-        private final ButtonWidget enabledButton;
-        private final ButtonWidget openConfigButton;
-        private final ButtonWidget deleteButton;
-        private final ButtonWidget moveUpButton;
-        private final ButtonWidget moveDownButton;
+        private final Button enabledButton;
+        private final Button openConfigButton;
+        private final Button deleteButton;
+        private final Button moveUpButton;
+        private final Button moveDownButton;
 
         //text location
         private final int nameX = width / 2 - 125;
@@ -118,41 +118,41 @@ public class configListWidget extends ElementListWidget<configListWidget.Abstrac
         public TunnelEntry(TunnelConfig tunnel) {
             this.tunnel = tunnel;
 
-            enabledButton = ButtonWidget.builder(enabledButtonText(), a -> toggleEnabled())
+            enabledButton = Button.builder(enabledButtonText(), a -> toggleEnabled())
                     .size(50, 20)
-                    .position(width / 2 - 25, 5)
+                    .pos(width / 2 - 25, 5)
                     .build();
 
-            openConfigButton = ButtonWidget.builder(Text.translatable("text_tunnels.config.tunnelConfig.configList.edit"), a -> {
-                        client.setScreen(new TunnelConfigScreen(screen, tunnel));
+            openConfigButton = Button.builder(Component.translatable("text_tunnels.config.tunnelConfig.configList.edit"), a -> {
+                        minecraft.setScreen(new TunnelConfigScreen(screen, tunnel));
                     })
                     .size(50, 20)
-                    .position(width / 2 + 45, 5)
+                    .pos(width / 2 + 45, 5)
                     .build();
 
-            deleteButton = ButtonWidget.builder(Text.translatable("selectServer.delete"), a -> {
-                        client.setScreen(new ConfirmScreen(this::deleteEntry, Text.translatable("text_tunnels.config.tunnelConfig.configList.deleteQuestion"), Text.translatable("text_tunnels.config.tunnelConfig.configList.lost", tunnel.name), Text.translatable("selectServer.deleteButton"), ScreenTexts.CANCEL));
+            deleteButton = Button.builder(Component.translatable("selectServer.delete"), a -> {
+                        minecraft.setScreen(new ConfirmScreen(this::deleteEntry, Component.translatable("text_tunnels.config.tunnelConfig.configList.deleteQuestion"), Component.translatable("text_tunnels.config.tunnelConfig.configList.lost", tunnel.name), Component.translatable("selectServer.deleteButton"), CommonComponents.GUI_CANCEL));
                     })
                     .size(50, 20)
-                    .position(width / 2 + 105, 5)
+                    .pos(width / 2 + 105, 5)
                     .build();
-            moveUpButton = ButtonWidget.builder(Text.literal("↑"), a -> moveUp())
+            moveUpButton = Button.builder(Component.literal("↑"), a -> moveUp())
                     .size(20, 20)
-                    .position(width / 2 + 165, 5)
+                    .pos(width / 2 + 165, 5)
                     .build();
-            moveDownButton = ButtonWidget.builder(Text.literal("↓"), a -> moveDown())
+            moveDownButton = Button.builder(Component.literal("↓"), a -> moveDown())
                     .size(20, 20)
-                    .position(width / 2 + 190, 5)
+                    .pos(width / 2 + 190, 5)
                     .build();
 
             children = List.of(enabledButton, openConfigButton, deleteButton, moveUpButton, moveDownButton);
         }
 
-        private Text enabledButtonText() {
+        private Component enabledButtonText() {
             if (tunnel.enabled) {
-                return Text.translatable("text_tunnels.config.tunnelConfig.configList.true").withColor(Color.GREEN.getRGB());
+                return Component.translatable("text_tunnels.config.tunnelConfig.configList.true").withColor(Color.GREEN.getRGB());
             } else {
-                return Text.translatable("text_tunnels.config.tunnelConfig.configList.false").withColor(Color.RED.getRGB());
+                return Component.translatable("text_tunnels.config.tunnelConfig.configList.false").withColor(Color.RED.getRGB());
             }
         }
 
@@ -180,34 +180,34 @@ public class configListWidget extends ElementListWidget<configListWidget.Abstrac
             if (confirmedAction) {
                 //delete this
                 allChannels.remove(tunnel);
-                removeEntryWithoutScrolling(this);
+                removeEntryFromTop(this);
             }
 
-            client.setScreen(screen);
+            minecraft.setScreen(screen);
         }
 
         @Override
-        public List<? extends Selectable> selectableChildren() {
-            return List.of(new Selectable() {
+        public List<? extends NarratableEntry> narratables() {
+            return List.of(new NarratableEntry() {
                 @Override
-                public SelectionType getType() {
-                    return SelectionType.HOVERED;
+                public NarrationPriority narrationPriority() {
+                    return NarrationPriority.HOVERED;
                 }
 
                 @Override
-                public void appendNarrations(NarrationMessageBuilder builder) {
-                    builder.put(NarrationPart.TITLE, tunnel.name);
+                public void updateNarration(NarrationElementOutput builder) {
+                    builder.add(NarratedElementType.TITLE, tunnel.name);
                 }
             });
         }
 
         @Override
-        public List<? extends Element> children() {
+        public List<? extends GuiEventListener> children() {
             return children;
         }
 
         @Override
-        public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             //widgets
             enabledButton.setY(this.getY());
             enabledButton.render(context, mouseX, mouseY, tickDelta);
@@ -220,7 +220,7 @@ public class configListWidget extends ElementListWidget<configListWidget.Abstrac
             moveDownButton.setY(this.getY());
             moveDownButton.render(context, mouseX, mouseY, tickDelta);
             //text
-            context.drawCenteredTextWithShadow(client.textRenderer, tunnel.name, nameX, this.getY() + 5, 0xFFFFFFFF);
+            context.drawCenteredString(minecraft.font, tunnel.name, nameX, this.getY() + 5, 0xFFFFFFFF);
         }
 
     }

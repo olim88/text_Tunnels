@@ -1,8 +1,8 @@
 package org.olim.text_tunnels.config.configs;
 
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.resources.Identifier;
 
 public class MainConfig {
     @SerialEntry
@@ -43,10 +43,10 @@ public class MainConfig {
     }
 
     public enum IndicatorStyle {
-        FLAME(Identifier.ofVanilla("textures/particle/flame.png"), 2, 8),
-        GLINT(Identifier.ofVanilla("textures/particle/glint.png"), 0, 8),
-        CRIT(Identifier.ofVanilla("textures/particle/critical_hit.png"), 0, 8),
-        SOUL(Identifier.ofVanilla("textures/particle/sculk_soul_8.png"), 4, 16);
+        FLAME(Identifier.withDefaultNamespace("textures/particle/flame.png"), 2, 8),
+        GLINT(Identifier.withDefaultNamespace("textures/particle/glint.png"), 0, 8),
+        CRIT(Identifier.withDefaultNamespace("textures/particle/critical_hit.png"), 0, 8),
+        SOUL(Identifier.withDefaultNamespace("textures/particle/sculk_soul_8.png"), 4, 16);
 
 
         private final Identifier identifier;
@@ -65,7 +65,7 @@ public class MainConfig {
 
         @Override
         public String toString() {
-            return I18n.translate("text_tunnels.config.main.unreadIndicators.style.mode." + name());
+            return I18n.get("text_tunnels.config.main.unreadIndicators.style.mode." + name());
         }
     }
 }

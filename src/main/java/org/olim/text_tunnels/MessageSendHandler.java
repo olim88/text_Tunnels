@@ -3,17 +3,17 @@ package org.olim.text_tunnels;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
 public class MessageSendHandler {
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Pattern GROUP_PATTERN = Pattern.compile("\\$\\d+");
     private static final Int2ObjectMap<Matcher> lastIncomingMatch = new Int2ObjectArrayMap<>();
@@ -58,7 +58,7 @@ public class MessageSendHandler {
                         LOGGER.error("[TextTunnels] not enough groups in receive prefix to fill in send prefix");
                         LOGGER.error("[TextTunnels] can not get group {} out of {} groups", index, replacements.groupCount());
                         if (CLIENT.player != null) {
-                            CLIENT.player.sendMessage(Text.translatable("text_tunnels.MessageSendHandler.error", index, replacements.groupCount()).formatted(Formatting.RED), false);
+                            CLIENT.player.displayClientMessage(Component.translatable("text_tunnels.MessageSendHandler.error", index, replacements.groupCount()).withStyle(ChatFormatting.RED), false);
                         }
 
                     } else {
@@ -70,7 +70,7 @@ public class MessageSendHandler {
                 else {
                     LOGGER.info("[TextTunnels] Can not replace group with out existing matched message");
                     if (CLIENT.player != null) {
-                        CLIENT.player.sendMessage(Text.translatable("text_tunnels.MessageSendHandler.noExistingError").formatted(Formatting.YELLOW), false);
+                        CLIENT.player.displayClientMessage(Component.translatable("text_tunnels.MessageSendHandler.noExistingError").withStyle(ChatFormatting.YELLOW), false);
                     }
                 }
                 prefix = prefix.replace(foundGroup, "");//todo tell the user about this

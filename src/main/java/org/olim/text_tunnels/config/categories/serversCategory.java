@@ -2,14 +2,14 @@ package org.olim.text_tunnels.config.categories;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
 import org.olim.text_tunnels.config.categories.tunnelManager.ConfigScreen;
 import org.olim.text_tunnels.config.configs.ServersConfig;
 import org.olim.text_tunnels.config.configs.TextTunnelsConfig;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
 public class serversCategory {
 
@@ -19,20 +19,20 @@ public class serversCategory {
         List<ConfigCategory> categories = new ArrayList<>(allServers.size());
         for (ServersConfig serverConfig : allServers) {
             ConfigCategory cat = ConfigCategory.createBuilder()
-                    .option(LabelOption.create(Text.translatable("text_tunnels.config.serverConfig.ip", serverConfig.ip)))
-                    .name(Text.literal(serverConfig.name))
-                    .tooltip(Text.translatable("text_tunnels.config.serverConfig.configFor", serverConfig.name))
+                    .option(LabelOption.create(Component.translatable("text_tunnels.config.serverConfig.ip", serverConfig.ip)))
+                    .name(Component.literal(serverConfig.name))
+                    .tooltip(Component.translatable("text_tunnels.config.serverConfig.configFor", serverConfig.name))
                     .option(Option.<Boolean>createBuilder()
-                            .name(Text.translatable("text_tunnels.config.serverConfig.enabled"))
-                            .description(OptionDescription.of(Text.translatable("text_tunnels.config.serverConfig.enabled.@Tooltip")))
+                            .name(Component.translatable("text_tunnels.config.serverConfig.enabled"))
+                            .description(OptionDescription.of(Component.translatable("text_tunnels.config.serverConfig.enabled.@Tooltip")))
                             .binding(true, () -> serverConfig.enabled, newVal -> serverConfig.enabled = newVal)
                             .controller(TickBoxControllerBuilder::create)
                             .build())
 
                     .option(ButtonOption.createBuilder()
-                            .name(Text.translatable("text_tunnels.config.serverConfig.tunnelConfig"))
-                            .text(Text.translatable("text_tunnels.config.serverConfig.open"))
-                            .action((screen, opt) -> MinecraftClient.getInstance().setScreen(new ConfigScreen(screen, serverConfig)))
+                            .name(Component.translatable("text_tunnels.config.serverConfig.tunnelConfig"))
+                            .text(Component.translatable("text_tunnels.config.serverConfig.open"))
+                            .action((screen, opt) -> Minecraft.getInstance().setScreen(new ConfigScreen(screen, serverConfig)))
                             .build())
                     .build();
             categories.add(cat);

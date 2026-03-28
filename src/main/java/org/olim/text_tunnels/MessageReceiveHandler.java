@@ -4,9 +4,9 @@ import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import org.olim.text_tunnels.config.ConfigManager;
 import org.slf4j.Logger;
 
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 public class MessageReceiveHandler {
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Int2ObjectMap<HashSet<Integer>> tunnels = new Int2ObjectArrayMap<>();
     private static List<Pattern> receivePrefixes;
@@ -36,7 +36,7 @@ public class MessageReceiveHandler {
         } catch (PatternSyntaxException e) {
             LOGGER.error("[TextTunnels] invalid receive prefix: {}", e.getMessage());
             if (CLIENT.player != null) {
-                CLIENT.player.sendMessage(Text.translatable("text_tunnels.messageReceiveHandler.error", e.getPattern()).formatted(Formatting.RED), false);
+                CLIENT.player.displayClientMessage(Component.translatable("text_tunnels.messageReceiveHandler.error", e.getPattern()).withStyle(ChatFormatting.RED), false);
             }
             return false;
         }
@@ -48,16 +48,16 @@ public class MessageReceiveHandler {
         return true;
     }
 
-    private static boolean addMessage(Text message, boolean overlay) {
+    private static boolean addMessage(Component message, boolean overlay) {
         if (overlay) return true;
-        String plainText = Formatting.strip(message.getString());
+        String plainText = ChatFormatting.stripFormatting(message.getString());
         boolean shouldNotifyALl = true;
         boolean modMessage = plainText.startsWith("[TextTunnels]");
         for (int index : tunnels.keySet()) {
             Pattern pattern = receivePrefixes.get(index);
             Matcher match = pattern.matcher(plainText);
             if (match.find() || modMessage) {
-                tunnels.get(index).add(CLIENT.inGameHud.getTicks());
+                tunnels.get(index).add(CLIENT.gui.getGuiTicks());
                 ButtonsHandler.addNotificationIndicator(index + 1);
                 //send match data to message sender for if it needs it to send message
                 if (!modMessage) {

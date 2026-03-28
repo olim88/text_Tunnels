@@ -1,8 +1,6 @@
 package org.olim.text_tunnels.mixins;
 
 
-import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.gui.hud.ChatHudLine;
 import org.objectweb.asm.Opcodes;
 import org.olim.text_tunnels.MessageReceiveHandler;
 import org.spongepowered.asm.mixin.Final;
@@ -13,42 +11,44 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
+import net.minecraft.client.GuiMessage;
+import net.minecraft.client.gui.components.ChatComponent;
 
-@Mixin(ChatHud.class)
+@Mixin(ChatComponent.class)
 
 public class ChatHudMixin {
 
 
     @Shadow
     @Final
-    private List<ChatHudLine.Visible> visibleMessages;
+    private List<GuiMessage.Line> trimmedMessages;
 
-    @Redirect(method = "render(Lnet/minecraft/client/gui/hud/ChatHud$Backend;IIZ)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
-    private List<ChatHudLine.Visible> textTunnels$beforeRender(ChatHud instance) {
+    @Redirect(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
+    private List<GuiMessage.Line> textTunnels$beforeRender(ChatComponent instance) {
         return filterVisible();
     }
 
 
-    @Redirect(method = "scroll", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
-    private List<ChatHudLine.Visible> textTunnels$editVisibleForScroll(ChatHud instance) {
+    @Redirect(method = "scrollChat", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
+    private List<GuiMessage.Line> textTunnels$editVisibleForScroll(ChatComponent instance) {
         return filterVisible();
     }
 
-    @Redirect(method = "refresh", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
-    private List<ChatHudLine.Visible> textTunnels$editRefresh(ChatHud instance) {
+    @Redirect(method = "refreshTrimmedMessages", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
+    private List<GuiMessage.Line> textTunnels$editRefresh(ChatComponent instance) {
         return filterVisible();
     }
 
-    @Redirect(method = "forEachVisibleLine", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
-    private List<ChatHudLine.Visible> textTunnels$editForEachVisible(ChatHud instance) {
+    @Redirect(method = "forEachLine", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;", opcode = Opcodes.GETFIELD))
+    private List<GuiMessage.Line> textTunnels$editForEachVisible(ChatComponent instance) {
         return filterVisible();
     }
 
     @Unique
-    private List<ChatHudLine.Visible> filterVisible() {
+    private List<GuiMessage.Line> filterVisible() {
         if (MessageReceiveHandler.isFilterInActive()) {
-            return visibleMessages;
+            return trimmedMessages;
         }
-        return visibleMessages.stream().filter(message -> MessageReceiveHandler.shouldShow(message.addedTime())).toList();
+        return trimmedMessages.stream().filter(message -> MessageReceiveHandler.shouldShow(message.addedTime())).toList();
     }
 }

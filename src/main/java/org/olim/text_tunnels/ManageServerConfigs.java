@@ -1,9 +1,6 @@
 package org.olim.text_tunnels;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.option.ServerList;
 import org.olim.text_tunnels.config.ConfigManager;
 import org.olim.text_tunnels.config.configs.ServersConfig;
 import org.olim.text_tunnels.config.configs.TunnelConfig;
@@ -13,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.multiplayer.ServerList;
 
 public class ManageServerConfigs {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -43,20 +43,20 @@ public class ManageServerConfigs {
 
     public static void updateSeverList() {
         // Get the current Minecraft client instance
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
 
         // Create a new ServerList instance using the client's options
         ServerList serverList = new ServerList(client);
 
         // Load the servers from the servers.dat file
-        serverList.loadFile();
+        serverList.load();
         LOGGER.info("[TextTunnels] found {} serves", serverList.size());
 
         //get a map of ips and names of the found servers
         Map<String, String> usersSevers = new HashMap<>();
         for (int i = 0; i < serverList.size(); i++) {
-            ServerInfo serverInfo = serverList.get(i);
-            usersSevers.put(serverInfo.address, serverInfo.name);
+            ServerData serverInfo = serverList.get(i);
+            usersSevers.put(serverInfo.ip, serverInfo.name);
         }
 
         //update config if there are new servers or create new list if empty

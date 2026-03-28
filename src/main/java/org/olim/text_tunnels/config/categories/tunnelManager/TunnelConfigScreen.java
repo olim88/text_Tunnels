@@ -1,26 +1,26 @@
 package org.olim.text_tunnels.config.categories.tunnelManager;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import org.olim.text_tunnels.config.ConfigManager;
 import org.olim.text_tunnels.config.configs.TunnelConfig;
 
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 public class TunnelConfigScreen extends Screen {
     private static final int PADDING = 30;
     private static final int SPACING = 22;
 
-    private static TextFieldWidget nameInput;
-    private static TextFieldWidget recivePrefixInput;
-    private static TextFieldWidget sendPrefixInput;
-    private static ButtonWidget finishButton;
+    private static EditBox nameInput;
+    private static EditBox recivePrefixInput;
+    private static EditBox sendPrefixInput;
+    private static Button finishButton;
 
     //text locations
     private static int nameLabelY;
@@ -32,7 +32,7 @@ public class TunnelConfigScreen extends Screen {
     private final TunnelConfig config;
 
     protected TunnelConfigScreen(Screen parent, TunnelConfig config) {
-        super(Text.translatable("text_tunnels.config.tunnelConfig.name"));
+        super(Component.translatable("text_tunnels.config.tunnelConfig.name"));
 
         this.parent = parent;
         this.config = config;
@@ -41,72 +41,72 @@ public class TunnelConfigScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        if (client == null) return;
+        if (minecraft == null) return;
         int usableWidth = this.width - PADDING * 2;
         int heightOffset = PADDING;
 
         //finish
-        finishButton = ButtonWidget.builder(Text.translatable("text_tunnels.config.tunnelConfig.finish"), button -> close())
+        finishButton = Button.builder(Component.translatable("text_tunnels.config.tunnelConfig.finish"), button -> onClose())
                 .width(usableWidth)
-                .position(PADDING, this.height - PADDING - 20)
+                .pos(PADDING, this.height - PADDING - 20)
                 .build();
 
         //name
         nameLabelY = heightOffset;
         heightOffset += SPACING / 2;
-        nameInput = new TextFieldWidget(client.textRenderer, PADDING, heightOffset, usableWidth, 20, Text.of(config.name));
+        nameInput = new EditBox(minecraft.font, PADDING, heightOffset, usableWidth, 20, Component.nullToEmpty(config.name));
         nameInput.setMaxLength(100);
-        nameInput.setText(config.name);
+        nameInput.setValue(config.name);
         heightOffset += SPACING;
-        addDrawableChild(nameInput);
+        addRenderableWidget(nameInput);
 
         //receive
         reciveLabelY = heightOffset;
         heightOffset += SPACING / 2;
-        recivePrefixInput = new TextFieldWidget(client.textRenderer, PADDING, heightOffset, usableWidth, 20, Text.of(config.receivePrefix));
+        recivePrefixInput = new EditBox(minecraft.font, PADDING, heightOffset, usableWidth, 20, Component.nullToEmpty(config.receivePrefix));
         recivePrefixInput.setMaxLength(100);
-        recivePrefixInput.setText(config.receivePrefix);
+        recivePrefixInput.setValue(config.receivePrefix);
         isReceivePrefixValid(config.receivePrefix);
-        recivePrefixInput.setChangedListener(TunnelConfigScreen::isReceivePrefixValid);
+        recivePrefixInput.setResponder(TunnelConfigScreen::isReceivePrefixValid);
         heightOffset += SPACING;
-        addDrawableChild(recivePrefixInput);
+        addRenderableWidget(recivePrefixInput);
 
         //send
         sendLabelY = heightOffset;
         heightOffset += SPACING / 2;
-        sendPrefixInput = new TextFieldWidget(client.textRenderer, PADDING, heightOffset, usableWidth, 20, Text.of(config.sendPrefix));
+        sendPrefixInput = new EditBox(minecraft.font, PADDING, heightOffset, usableWidth, 20, Component.nullToEmpty(config.sendPrefix));
         sendPrefixInput.setMaxLength(100);
-        sendPrefixInput.setText(config.sendPrefix);
-        sendPrefixInput.setTooltip(Tooltip.of(Text.translatable("text_tunnels.config.tunnelConfig.sendPrefix.@Tooltip")));
-        addDrawableChild(sendPrefixInput);
+        sendPrefixInput.setValue(config.sendPrefix);
+        sendPrefixInput.setTooltip(Tooltip.create(Component.translatable("text_tunnels.config.tunnelConfig.sendPrefix.@Tooltip")));
+        addRenderableWidget(sendPrefixInput);
 
 
-        addDrawableChild(finishButton);
+        addRenderableWidget(finishButton);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 16, 0xFFFFFFFF);
+        context.drawCenteredString(this.font, this.title, this.width / 2, 16, 0xFFFFFFFF);
 
         //draw labels
-        context.drawTextWithShadow(this.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.label.name"), PADDING, nameLabelY, 0xFFFFFFFF);
-        context.drawTextWithShadow(this.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.label.receive"), PADDING, reciveLabelY, 0xFFFFFFFF);
-        context.drawTextWithShadow(this.textRenderer, Text.translatable("text_tunnels.config.tunnelConfig.label.send"), PADDING, sendLabelY, 0xFFFFFFFF);
+        context.drawString(this.font, Component.translatable("text_tunnels.config.tunnelConfig.label.name"), PADDING, nameLabelY, 0xFFFFFFFF);
+        context.drawString(this.font, Component.translatable("text_tunnels.config.tunnelConfig.label.receive"), PADDING, reciveLabelY, 0xFFFFFFFF);
+        context.drawString(this.font, Component.translatable("text_tunnels.config.tunnelConfig.label.send"), PADDING, sendLabelY, 0xFFFFFFFF);
     }
 
     @Override
-    public void close() {
-        if (client != null) {
+    public void onClose() {
+        if (minecraft != null) {
             save();
-            client.setScreen(parent);
+            minecraft.setScreen(parent);
         }
     }
 
     private void save() {
-        config.name = nameInput.getText();
-        config.receivePrefix = recivePrefixInput.getText();
-        config.sendPrefix = sendPrefixInput.getText();
+        config.name = nameInput.getValue();
+        config.receivePrefix = recivePrefixInput.getValue();
+        config.sendPrefix = sendPrefixInput.getValue();
         ConfigManager.save();
     }
 
@@ -119,13 +119,13 @@ public class TunnelConfigScreen extends Screen {
         try {
             Pattern.compile(string);
             //regex is valid. set tooltip green and enable finish button
-            recivePrefixInput.setTooltip(Tooltip.of(Text.translatable("text_tunnels.config.tunnelConfig.recivePrefix.@Tooltip").formatted(Formatting.GREEN)));
-            finishButton.setTooltip(Tooltip.of(Text.translatable("text_tunnels.config.tunnelConfig.finish.@Tooltip.valid")));
+            recivePrefixInput.setTooltip(Tooltip.create(Component.translatable("text_tunnels.config.tunnelConfig.recivePrefix.@Tooltip").withStyle(ChatFormatting.GREEN)));
+            finishButton.setTooltip(Tooltip.create(Component.translatable("text_tunnels.config.tunnelConfig.finish.@Tooltip.valid")));
             finishButton.active = true;
         } catch (PatternSyntaxException e) {
             //regex is invalid. set tooltip red and disable finish button
-            recivePrefixInput.setTooltip(Tooltip.of(Text.translatable("text_tunnels.config.tunnelConfig.recivePrefix.@Tooltip").formatted(Formatting.RED)));
-            finishButton.setTooltip(Tooltip.of(Text.translatable("text_tunnels.config.tunnelConfig.finish.@Tooltip.invalid").formatted(Formatting.RED)));
+            recivePrefixInput.setTooltip(Tooltip.create(Component.translatable("text_tunnels.config.tunnelConfig.recivePrefix.@Tooltip").withStyle(ChatFormatting.RED)));
+            finishButton.setTooltip(Tooltip.create(Component.translatable("text_tunnels.config.tunnelConfig.finish.@Tooltip.invalid").withStyle(ChatFormatting.RED)));
             finishButton.active = false;
         }
     }

@@ -5,8 +5,8 @@ import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import org.olim.text_tunnels.config.ConfigManager;
 import org.olim.text_tunnels.config.configs.ServersConfig;
 import org.olim.text_tunnels.config.configs.TunnelConfig;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 public class Text_tunnels implements ClientModInitializer {
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private static String currentAddress;
@@ -37,7 +37,7 @@ public class Text_tunnels implements ClientModInitializer {
     }
 
     private static int openConfig() {
-        CLIENT.send(() -> CLIENT.setScreen(ConfigManager.getConfigScreen(null)));
+        CLIENT.schedule(() -> CLIENT.setScreen(ConfigManager.getConfigScreen(null)));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -46,7 +46,7 @@ public class Text_tunnels implements ClientModInitializer {
         MessageReceiveHandler.updateTunnel(index);
         MessageSendHandler.updateIndex(index);
         //make sure scrolling is reset
-        CLIENT.inGameHud.getChatHud().scroll(0);
+        CLIENT.gui.getChat().scrollChat(0);
     }
 
     public static void updateLastMatch(int index, Matcher match) {
@@ -118,7 +118,7 @@ public class Text_tunnels implements ClientModInitializer {
 
     public static void configUpdated() {
         //when the config is updated check if the player is on a sever and then reload
-        ClientPlayNetworkHandler networkHandler = CLIENT.getNetworkHandler();
+        ClientPacketListener networkHandler = CLIENT.getConnection();
         if (networkHandler != null) {
             refreshServerConfig();
         }
