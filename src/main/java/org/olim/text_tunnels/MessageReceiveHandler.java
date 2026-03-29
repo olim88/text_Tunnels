@@ -60,7 +60,7 @@ public class MessageReceiveHandler {
             Matcher match = pattern.matcher(plainText);
             if (match.find() || modMessage) {
                 tunnels.get(index).add(CLIENT.gui.getGuiTicks());
-                if (currentTunnel != -1){
+                if (currentTunnel != -1 && !modMessage){
                     ButtonsHandler.addNotificationIndicator(index + 1);
                 }
                 //send match data to message sender for if it needs it to send message
