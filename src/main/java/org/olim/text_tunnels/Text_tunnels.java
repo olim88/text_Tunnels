@@ -3,8 +3,9 @@ package org.olim.text_tunnels;
 import com.mojang.brigadier.Command;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import org.olim.text_tunnels.config.ConfigManager;
@@ -12,7 +13,6 @@ import org.olim.text_tunnels.config.configs.ServersConfig;
 import org.olim.text_tunnels.config.configs.TunnelConfig;
 import org.slf4j.Logger;
 
-import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +32,8 @@ public class Text_tunnels implements ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> dispatcher.register(ClientCommands.literal("textTunnels").executes(source -> openConfig()))));
         //init other inits
         MessageReceiveHandler.init();
+        // listen for players leaving a server
+        ClientPlayConnectionEvents.DISCONNECT.register(this::onPlayerDisconnect);
 
         LOGGER.info("[TextTunnels] Text Tunnels Mod Initialized!");
     }
@@ -39,6 +41,13 @@ public class Text_tunnels implements ClientModInitializer {
     private static int openConfig() {
         CLIENT.schedule(() -> CLIENT.setScreen(ConfigManager.getConfigScreen(null)));
         return Command.SINGLE_SUCCESS;
+    }
+
+    /**
+     * Clears the tunnels set for a user on disconnect
+     */
+    private void onPlayerDisconnect(ClientPacketListener clientPacketListener, Minecraft minecraft) {
+        clear();
     }
 
     public static void updateTunnel(int index) {
@@ -55,10 +64,11 @@ public class Text_tunnels implements ClientModInitializer {
 
 
     public static void loadForServer(String serverAddress) {
-       currentAddress = serverAddress;
-       refreshServerConfig();
+        currentAddress = serverAddress;
+        refreshServerConfig();
     }
-    public static void refreshServerConfig(){
+
+    public static void refreshServerConfig() {
         if (!ConfigManager.get().mainConfig.enabled) {
             clear();
             return;

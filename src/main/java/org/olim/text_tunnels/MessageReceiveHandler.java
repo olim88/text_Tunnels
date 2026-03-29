@@ -49,27 +49,31 @@ public class MessageReceiveHandler {
     }
 
     private static boolean addMessage(Component message, boolean overlay) {
+        //only look at chat messages
         if (overlay) return true;
+
         String plainText = ChatFormatting.stripFormatting(message.getString());
-        boolean shouldNotifyALl = true;
+        boolean shouldNotifyAll = true;
         boolean modMessage = plainText.startsWith("[TextTunnels]");
         for (int index : tunnels.keySet()) {
             Pattern pattern = receivePrefixes.get(index);
             Matcher match = pattern.matcher(plainText);
             if (match.find() || modMessage) {
                 tunnels.get(index).add(CLIENT.gui.getGuiTicks());
-                ButtonsHandler.addNotificationIndicator(index + 1);
+                if (currentTunnel != -1){
+                    ButtonsHandler.addNotificationIndicator(index + 1);
+                }
                 //send match data to message sender for if it needs it to send message
                 if (!modMessage) {
                     Text_tunnels.updateLastMatch(index, match);
                 }
                 //if the message gets sent to a channel that is currently being viewed there is no need to add a notification to the all channel
                 if (index == currentTunnel || peaking.contains(index)) {
-                    shouldNotifyALl = false;
+                    shouldNotifyAll = false;
                 }
             }
         }
-        if (shouldNotifyALl) {
+        if (shouldNotifyAll) {
             ButtonsHandler.addNotificationIndicator(0);
         }
         //if tunnel can not be found do not add it to tunnel
