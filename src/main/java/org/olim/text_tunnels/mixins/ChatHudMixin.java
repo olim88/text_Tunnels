@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.gui.components.ChatComponent;
 
@@ -49,6 +51,6 @@ public class ChatHudMixin {
         if (MessageReceiveHandler.isFilterInActive()) {
             return trimmedMessages;
         }
-        return trimmedMessages.stream().filter(message -> MessageReceiveHandler.shouldShow(message.addedTime())).toList();
+        return trimmedMessages.stream().filter(message -> MessageReceiveHandler.shouldShow(message.addedTime())).collect(Collectors.toList());
     }
 }
