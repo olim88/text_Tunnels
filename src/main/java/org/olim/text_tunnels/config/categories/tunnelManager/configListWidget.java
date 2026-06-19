@@ -124,14 +124,14 @@ public class configListWidget extends ContainerObjectSelectionList<configListWid
                     .build();
 
             openConfigButton = Button.builder(Component.translatable("text_tunnels.config.tunnelConfig.configList.edit"), a -> {
-                        minecraft.setScreen(new TunnelConfigScreen(screen, tunnel));
+                        minecraft.setScreenAndShow(new TunnelConfigScreen(screen, tunnel));
                     })
                     .size(50, 20)
                     .pos(width / 2 + 45, 5)
                     .build();
 
             deleteButton = Button.builder(Component.translatable("selectServer.delete"), a -> {
-                        minecraft.setScreen(new ConfirmScreen(this::deleteEntry, Component.translatable("text_tunnels.config.tunnelConfig.configList.deleteQuestion"), Component.translatable("text_tunnels.config.tunnelConfig.configList.lost", tunnel.name), Component.translatable("selectServer.deleteButton"), CommonComponents.GUI_CANCEL));
+                        minecraft.setScreenAndShow(new ConfirmScreen(this::deleteEntry, Component.translatable("text_tunnels.config.tunnelConfig.configList.deleteQuestion"), Component.translatable("text_tunnels.config.tunnelConfig.configList.lost", tunnel.name), Component.translatable("selectServer.deleteButton"), CommonComponents.GUI_CANCEL));
                     })
                     .size(50, 20)
                     .pos(width / 2 + 105, 5)
@@ -183,7 +183,7 @@ public class configListWidget extends ContainerObjectSelectionList<configListWid
                 removeEntryFromTop(this);
             }
 
-            minecraft.setScreen(screen);
+            minecraft.setScreenAndShow(screen);
         }
 
         @Override

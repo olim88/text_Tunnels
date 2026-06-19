@@ -59,7 +59,7 @@ public class MessageReceiveHandler {
             Pattern pattern = receivePrefixes.get(index);
             Matcher match = pattern.matcher(plainText);
             if (match.find() || modMessage) {
-                tunnels.get(index).add(CLIENT.gui.getGuiTicks());
+                tunnels.get(index).add(CLIENT.gui.hud.getGuiTicks());
                 if (currentTunnel != -1 && !modMessage){
                     ButtonsHandler.addNotificationIndicator(index + 1);
                 }

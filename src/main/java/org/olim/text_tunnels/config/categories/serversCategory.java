@@ -32,7 +32,7 @@ public class serversCategory {
                     .option(ButtonOption.createBuilder()
                             .name(Component.translatable("text_tunnels.config.serverConfig.tunnelConfig"))
                             .text(Component.translatable("text_tunnels.config.serverConfig.open"))
-                            .action((screen, opt) -> Minecraft.getInstance().setScreen(new ConfigScreen(screen, serverConfig)))
+                            .action((screen, opt) -> Minecraft.getInstance().setScreenAndShow(new ConfigScreen(screen, serverConfig)))
                             .build())
                     .build();
             categories.add(cat);

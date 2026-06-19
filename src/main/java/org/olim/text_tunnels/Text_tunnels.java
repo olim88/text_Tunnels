@@ -39,7 +39,7 @@ public class Text_tunnels implements ClientModInitializer {
     }
 
     private static int openConfig() {
-        CLIENT.schedule(() -> CLIENT.setScreen(ConfigManager.getConfigScreen(null)));
+        CLIENT.schedule(() -> CLIENT.setScreenAndShow(ConfigManager.getConfigScreen(null)));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -55,7 +55,7 @@ public class Text_tunnels implements ClientModInitializer {
         MessageReceiveHandler.updateTunnel(index);
         MessageSendHandler.updateIndex(index);
         //make sure scrolling is reset
-        CLIENT.gui.getChat().scrollChat(0);
+        CLIENT.gui.hud.getChat().scrollChat(0);
     }
 
     public static void updateLastMatch(int index, Matcher match) {

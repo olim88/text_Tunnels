@@ -56,7 +56,7 @@ public class ConfigScreen extends Screen {
     public void onClose() {
         ConfigManager.save();
         if (minecraft != null) {
-            this.minecraft.setScreen(parent);
+            this.minecraft.setScreenAndShow(parent);
         }
 
     }

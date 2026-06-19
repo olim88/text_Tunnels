@@ -100,7 +100,7 @@ public class TunnelConfigScreen extends Screen {
     public void onClose() {
         if (minecraft != null) {
             save();
-            minecraft.setScreen(parent);
+            minecraft.setScreenAndShow(parent);
         }
     }
 
