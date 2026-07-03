@@ -50,7 +50,7 @@ public class MessageReceiveHandler {
 
     private static boolean addMessage(Component message, boolean overlay) {
         //only look at chat messages
-        if (overlay) return true;
+        if (overlay || !ConfigManager.get().mainConfig.enabled) return true;
 
         String plainText = ChatFormatting.stripFormatting(message.getString());
         boolean shouldNotifyAll = true;
@@ -138,6 +138,6 @@ public class MessageReceiveHandler {
     }
 
     public static boolean isFilterInActive() {
-        return currentTunnel == -1;
+        return currentTunnel == -1 || !ConfigManager.get().mainConfig.enabled;
     }
 }

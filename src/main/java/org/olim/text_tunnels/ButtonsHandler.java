@@ -51,6 +51,8 @@ public class ButtonsHandler {
     }
 
     public static void render(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        //make sure the mod is enabled
+        if (!ConfigManager.get().mainConfig.enabled) return;
         //render all the buttons
         int index = -1;
         for (Button button : activeButtons) {
@@ -89,7 +91,7 @@ public class ButtonsHandler {
     }
 
     public static void updatePositions(int x, int y, int height) {
-        if (activeButtons.isEmpty()) {
+        if (activeButtons.isEmpty() || !ConfigManager.get().mainConfig.enabled) {
             return;
         }
         int rowOffset = 0;
@@ -118,6 +120,7 @@ public class ButtonsHandler {
     }
 
     public static void mouseClicked(MouseButtonEvent click, boolean doubled) {
+        if (!ConfigManager.get().mainConfig.enabled) return;
         int index = -1; //all button has index of minus 1
         for (Button button : activeButtons) {
             //check for normal click
