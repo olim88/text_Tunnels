@@ -90,7 +90,7 @@ public class ManageServerConfigs {
             newConfig.ip = server.getKey();
             newConfig.name = server.getValue();
             if (DEFAULT_CONFIGS.containsKey(newConfig.ip)) {
-                newConfig.tunnelConfigs = DEFAULT_CONFIGS.get(newConfig.ip);
+                newConfig.tunnelConfigs = new ArrayList<>(DEFAULT_CONFIGS.get(newConfig.ip));
             }
             ConfigManager.get().serversConfigs.add(newConfig);
         }
