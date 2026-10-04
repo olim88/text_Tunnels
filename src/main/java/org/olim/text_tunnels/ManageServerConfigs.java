@@ -1,6 +1,9 @@
 package org.olim.text_tunnels;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.multiplayer.ServerList;
 import org.olim.text_tunnels.config.ConfigManager;
 import org.olim.text_tunnels.config.configs.ServersConfig;
 import org.olim.text_tunnels.config.configs.TunnelConfig;
@@ -10,9 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.client.multiplayer.ServerList;
 
 public class ManageServerConfigs {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -38,6 +38,10 @@ public class ManageServerConfigs {
                     new TunnelConfig("Guild", "Guild >", "/gc "),
                     new TunnelConfig("Party", "Party >", "/pc "),
                     new TunnelConfig("Private", "(From|To)( \\[(VIP|MVP)\\+?\\])? (.[^\\s]+):", "/msg $4 ")
+            )),
+            Map.entry("mc.hoplite.gg", List.of(
+                    new TunnelConfig("Party", "PARTY » (\\S+):", "/partychat "),
+                    new TunnelConfig("Private", "(. )?(?:You → .? (\\S+)|(\\S+) → You):", "/reply ")
             ))
     );
 

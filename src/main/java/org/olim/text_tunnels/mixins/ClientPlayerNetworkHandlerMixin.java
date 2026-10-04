@@ -5,18 +5,28 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import org.olim.text_tunnels.MessageSendHandler;
 import org.olim.text_tunnels.config.ConfigManager;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPacketListener.class)
-public class ClientPlayerNetworkHandlerMixin {
+public abstract class ClientPlayerNetworkHandlerMixin {
 
-    @ModifyVariable(method = "sendChat", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
-    private String textTunnels$sendMessage(String content) {
+    @Shadow
+    public abstract void sendCommand(String command);
+
+    @Inject(method = "sendChat", at = @At(value = "HEAD"), cancellable = true)
+    private void textTunnels$sendMessage(String content, CallbackInfo ci) {
         //do not try to edit commands;
         if (content.startsWith("/") || !ConfigManager.get().mainConfig.enabled) {
-            return content;
+            return;
         }
-        return MessageSendHandler.getPrefix() + content;
+        String newPrefix = MessageSendHandler.getPrefix();
+        //make sure there is a prefix then send a command
+        if (newPrefix != null && !newPrefix.isBlank()) {
+            this.sendCommand(MessageSendHandler.getPrefix() + content);
+            ci.cancel();
+        }
     }
 }

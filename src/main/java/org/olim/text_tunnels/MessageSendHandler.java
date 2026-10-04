@@ -3,14 +3,14 @@ package org.olim.text_tunnels;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 
 public class MessageSendHandler {
     private static final Minecraft CLIENT = Minecraft.getInstance();
@@ -45,6 +45,10 @@ public class MessageSendHandler {
 
         if (currentIndex < sendPrefixes.size()) {
             String prefix = sendPrefixes.get(currentIndex);
+            //remove any slash in prefix as not needed
+            if (prefix.startsWith("/")) {
+                prefix = prefix.substring(1);
+            }
             //see if there are patterns in the send string to be replaced with relevant data
             boolean hasData = lastIncomingMatch.containsKey(currentIndex);
             Matcher replacements = lastIncomingMatch.get(currentIndex);
@@ -62,7 +66,12 @@ public class MessageSendHandler {
                         }
 
                     } else {
-                        prefix = prefix.replace(foundGroup, replacements.group(index));
+                        String replacement = replacements.group(index);
+                        if (replacement != null) {
+                            prefix = prefix.replace(foundGroup, replacements.group(index));
+                        } else {
+                            prefix = prefix.replace(foundGroup, "");
+                        }
                         continue;
                     }
                 }
@@ -77,7 +86,6 @@ public class MessageSendHandler {
 
 
             }
-
             return prefix;
         }
         LOGGER.info("[TextTunnels] sender prefix index to out of range ({})", currentIndex);
