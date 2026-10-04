@@ -38,6 +38,10 @@ public class ManageServerConfigs {
                     new TunnelConfig("Guild", "Guild >", "/gc "),
                     new TunnelConfig("Party", "Party >", "/pc "),
                     new TunnelConfig("Private", "(From|To)( \\[(VIP|MVP)\\+?\\])? (.[^\\s]+):", "/msg $4 ")
+            )),
+            Map.entry("mc.hoplite.gg", List.of(
+                    new TunnelConfig("Party", "PARTY » (\\S+):", "/partychat "),
+                    new TunnelConfig("Private", "(. )?(?:You → .? (\\S+)|(\\S+) → You):", "/reply ")
             ))
     );
 
