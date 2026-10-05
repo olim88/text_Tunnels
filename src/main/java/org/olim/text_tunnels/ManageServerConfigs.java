@@ -41,7 +41,7 @@ public class ManageServerConfigs {
             )),
             Map.entry("mc.hoplite.gg", List.of(
                     new TunnelConfig("Party", "PARTY » (\\S+):", "/partychat "),
-                    new TunnelConfig("Private", "(. )?(?:You → .? (\\S+)|(\\S+) → You):", "/reply ")
+                    new TunnelConfig("Private", "(. )?(?:You →( .)? (\\S+)|(\\S+) → You):", "/reply ")
             ))
     );
 
